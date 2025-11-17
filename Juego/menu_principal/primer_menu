@@ -1,0 +1,97 @@
+
+import pygame, sys
+
+# Inicializa Pygame
+pygame.init()
+
+#  CONSTANTES Y CONFIGURACIÓN 
+ANCHO_PANTALLA, ALTO_PANTALLA = 800, 600
+CENTRO_X = ANCHO_PANTALLA // 2
+INICIO_Y, ESPACIADO = 225, 64
+ANCHO_BOTON, ALTO_BOTON = 300, 60 
+BLANCO, NEGRO = (255, 255, 255), (0, 0, 0)
+AZUL_MENU, AMARILLO = (0, 102, 204), (255, 255, 0) 
+GRIS_PANEL = (30, 30, 45, 180) 
+
+pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
+pygame.display.set_caption("Menu de Tux Revolution (Diamante)")
+fuente_titulo = pygame.font.Font(None, 80) 
+fuente_opciones = pygame.font.Font(None, 40)
+
+# FUNCIÓN DE ACCIÓN CENTRAL 
+def manejar_acciones_boton(indice):
+    """Maneja las acciones basadas en el índice del botón pulsado."""
+    global bucle_principal
+    match indice:
+        case 0: print(">>> Iniciando el juego principal...")
+        case 1: print(">>> Conectando al lobby...")
+        case 2: print(">>> Mostrando puntuaciones altas...")
+        case 3: print(">>> Abriendo opciones...")
+        case 4: print(">>> Mostrando los créditos...")
+        case 5: bucle_principal = False # Acción de Salir
+
+# DATOS DEL MENÚ Y POSICIONES 
+textos_botones = ["JUGAR", "MULTIJUGADOR", "PUNTUACIÓN", "OPCIONES DE JUEGO", "CRÉDITOS", "SALIR"]
+# Almacenamos los puntos del polígono, el Rect para colisiones y la posición Y del texto
+botones_data = [] 
+
+for i, texto in enumerate(textos_botones):
+    pos_y_centro = INICIO_Y + i * ESPACIADO + (20 if texto == "SALIR" else 0)
+    
+    # Calcular los 4 vértices del diamante
+    puntos_diamante = [
+        (CENTRO_X, pos_y_centro - ALTO_BOTON // 2), 
+        (CENTRO_X + ANCHO_BOTON // 2, pos_y_centro), 
+        (CENTRO_X, pos_y_centro + ALTO_BOTON // 2), 
+        (CENTRO_X - ANCHO_BOTON // 2, pos_y_centro)  
+    ]
+
+    rect_colision = pygame.Rect(CENTRO_X - ANCHO_BOTON // 2, pos_y_centro - ALTO_BOTON // 2, ANCHO_BOTON, ALTO_BOTON)
+    
+    botones_data.append({"puntos": puntos_diamante, "centro_y": pos_y_centro, "rect": rect_colision})
+
+# Título
+texto_titulo = fuente_titulo.render("TUX REVOLUTION", True, NEGRO)
+rect_titulo = texto_titulo.get_rect(center=(CENTRO_X, 100))
+
+# BUCLE PRINCIPAL 
+bucle_principal = True
+while bucle_principal:
+    posicion_mouse = pygame.mouse.get_pos() 
+
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            bucle_principal = False
+        if evento.type == pygame.MOUSEBUTTONDOWN:
+            for i, data in enumerate(botones_data):
+
+
+                if data["rect"].collidepoint(evento.pos):
+                    manejar_acciones_boton(i)
+
+    pantalla.fill(BLANCO)
+    
+    # Dibujamos el panel de fondo
+    panel_surface = pygame.Surface((ANCHO_PANTALLA, ALTO_PANTALLA), pygame.SRCALPHA)
+    pygame.draw.rect(panel_surface, GRIS_PANEL, panel_surface.get_rect(), border_radius=50)
+    pantalla.blit(panel_surface, (0, 0))
+    
+    pantalla.blit(texto_titulo, rect_titulo)
+
+    # Dibujado de botones (diamantes)
+    for i, data in enumerate(botones_data):
+
+        if data["rect"].collidepoint(posicion_mouse):
+             color = AMARILLO
+        else:
+             color = AZUL_MENU
+        
+        # Dibujamos la forma de polígono (diamante) visualmente
+        pygame.draw.polygon(pantalla, color, data["puntos"])
+        
+        # Renderizamos el texto
+        superficie_texto = fuente_opciones.render(textos_botones[i], True, NEGRO)
+        rect_texto = superficie_texto.get_rect(center=(CENTRO_X, data["centro_y"]))
+        pantalla.blit(superficie_texto, rect_texto)
+
+    pygame.display.flip()
