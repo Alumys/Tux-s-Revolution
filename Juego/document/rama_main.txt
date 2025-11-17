@@ -1,0 +1,12 @@
+Documentacion de la rama principal (Criolla)
+
+# Primeros cambios del dia 13/11/2025 
+
+    * Bucle Principal de Pygame
+    * Icono del juego
+    * Organizacion de carpetas ( document, assets, etc )
+
+~ Todos los cambios fueron hechos por la rama_lauta. ~
+
+
+
