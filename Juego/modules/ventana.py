@@ -1,7 +1,7 @@
 import pygame
 # CONSTANTES # 
 
-pygame.init()
+
 # display/pantalla principal#
 ANCHO_PANTALLA_P = 800
 LARGO_PANTALLA_P = 600
