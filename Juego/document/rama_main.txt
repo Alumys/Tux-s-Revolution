@@ -1,13 +1,12 @@
-Aca se encuentra la documentacion de la rama main - root
+Documentacion de la rama principal (Criolla)
 
-Se escribira en un formato breve y limpio, marcando la fecha del cambio y las modificaciones de la rama.
+# Primeros cambios del dia 13/11/2025 
 
-# Cambios 14/11/2025. - Lautaro/root - 
+    * Bucle Principal de Pygame
+    * Icono del juego
+    * Organizacion de carpetas ( document, assets, etc )
 
-    * Se agrego el archivo .gitignore a la carpeta raiz del juego. 
-        + Se colocaron los parametros a seguir por parte del archivo,
-          para evitar posibles push con archivos inutiles. 
-          
-    * Copia de archivos de la rama_lauta a la rama main.
-        + Archivos: Posibles fuentes a utilizar.
-    
+~ Todos los cambios fueron hechos por la rama_lauta. ~
+
+
+
