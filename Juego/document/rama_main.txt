@@ -1,0 +1,13 @@
+Aca se encuentra la documentacion de la rama main - root
+
+Se escribira en un formato breve y limpio, marcando la fecha del cambio y las modificaciones de la rama.
+
+# Cambios 14/11/2025. - Lautaro/root - 
+
+    * Se agrego el archivo .gitignore a la carpeta raiz del juego. 
+        + Se colocaron los parametros a seguir por parte del archivo,
+          para evitar posibles push con archivos inutiles. 
+          
+    * Copia de archivos de la rama_lauta a la rama main.
+        + Archivos: Posibles fuentes a utilizar.
+    

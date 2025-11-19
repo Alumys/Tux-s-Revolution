@@ -1,0 +1,16 @@
+Aca se encuentra mi documentacion - Lautaro Rosaschi
+
+Se escribira en un formato breve y limpio, marcando la fecha del cambio y las modificaciones de mi rama.
+
+# Cambios 14/11/2025. - Solitario - 
+    
+    * Carpeta fonts, para las fuentes.
+        + Archivos: Posibles fuentes a utilizar.
+    
+        desc: 
+            Se guardaron los archivos que contienen las fuentes
+            que utilizaremos para las pruebas.
+
+    
+
+
