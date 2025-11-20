@@ -1,0 +1,23 @@
+Documentacion de la rama principal (Criolla)
+
+
+# Modularizando menu de rama_araceli y rama_timo 20/11/25:
+    |
+    +-| CONSTANTES: [menu.py]
+    |
+    |   # Se movieron a un modulo llamado [m_constantes.py].
+    |       + Ahi estaran todas las constantes del menu.
+    |
+    +-| FUNCIONES: [menu.py]
+    |
+    |   # Se dejaron en el mismo lugar de definicion. 
+    |       + La razon?
+    |           - Son funciones que cumplen con su cometido, ademas decir,
+    |             la llamada desde el modulo [main.py] lo hace directamente a 
+    |             este modulo en especifico...
+    |              
+    +-| VARIABLES: [menu.py]
+    |
+    |   # Se movieron a un modulo llamado [m_variables.py].
+    |       + Ahi estaran todas las variables/valores mutables del menu.
+    |

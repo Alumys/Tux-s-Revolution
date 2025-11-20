@@ -1,6 +1,9 @@
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame
 
+from modules.bucle_juego import ejecutar_juego
+from modules.ventana import ventana_principal
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
 from modules.configs import FPS, RELOJ
@@ -8,18 +11,11 @@ from modules.menu import ejecutar_menu # Menu completo
 
 pygame.init()
 
-# Configuración de la ventana principal
-ventana_principal = pygame.display.set_mode((ANCHO, ALTO))
+# Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
 pygame.display.set_icon(ICONO)
 
-# --- Definición de Estados del Juego ---
-ESTADO_MENU = "MENU"
-ESTADO_JUGAR = "JUGAR"
-ESTADO_SALIR = "SALIR"
-
-# --- Funciones de Estados ---
-
+# --- Bucle de Juego --- #
 def ejecutar_juego(pantalla, reloj):
     """
     Función que gestiona el bucle de la partida (estado JUGAR).
@@ -53,15 +49,12 @@ def ejecutar_juego(pantalla, reloj):
         
     return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón
 
-# --- Bucle Principal del Aplicación ---
-
+# --- Funciones de Estados ---
 def main():
     """
-    Función principal de la aplicación. Inicializa Pygame y ejecuta el bucle
+    Inicializa Pygame y ejecuta el bucle 
     de gestión de estados hasta que se alcanza el estado SALIR.
-    
     """
-    
     # La variable que controla en qué parte del juego estamos
     estado_actual = ESTADO_MENU 
     

@@ -1,24 +1,9 @@
 import pygame
 
-# --- CONSTANTES Y CONFIGURACIÓN ---
 from modules.ventana import LARGO_PANTALLA_P
-ANCHO_PANTALLA = 800  # Mantener para la lógica interna del menú
-CENTRO_X = ANCHO_PANTALLA // 2
-INICIO_Y = 225
-ESPACIADO = 64
-ALTO_DIAMANTE = 60 # Este valor sera el alto del diamante
-                 
-ANCHO_DIAMANTE = 300  # Este valor sera el alto del diamante
-
-# Colores (Estas constantes de color son utiles para usar aca)
-NEGRO = (0, 0, 0)
-BLANCO = (255, 255, 255)
-AZUL_MENU = (0, 102, 204)
-AMARILLO = (255, 255, 0)
-GRIS_PANEL = (30, 30, 45, 180) # Con Alpha (transparencia)
-
-# DATOS DEL MENÚ Y POSICIONES
-textos_botones = ["JUGAR", "MULTIJUGADOR", "PUNTUACIÓN", "OPCIONES DE JUEGO", "CRÉDITOS", "SALIR"] # Creamos una lista con las opciones
+from modules.dependencias_menu.m_constantes import ANCHO_PANTALLA, CENTRO_X, INICIO_Y, ESPACIADO, ALTO_DIAMANTE, ANCHO_DIAMANTE
+from modules.dependencias_menu.m_colores import NEGRO, BLANCO, AZUL_MENU, AMARILLO, GRIS_PANEL
+from modules.dependencias_menu.m_variables import textos_botones
 
 # FUNCIÓN DE ACCIÓN CENTRAL
 # Modificada para devolver un string que represente el nuevo estado
@@ -51,7 +36,6 @@ def manejar_acciones_boton(indice):
         print(">>> Acción de Salir")
         return "SALIR" # Nuevo estado: Salir
     return "MENU" # Por defecto, si no es una acción de cambio de pantalla, se queda en el menú
-
 
 def ejecutar_menu(pantalla, reloj):
     """
