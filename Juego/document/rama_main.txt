@@ -1,4 +1,4 @@
-Documentacion de la rama principal (Criolla)
+Documentacion de Lauta/root
 
 # Primeros cambios del dia 13/11/2025 
 
@@ -8,5 +8,27 @@ Documentacion de la rama principal (Criolla)
 
 ~ Todos los cambios fueron hechos por la rama_lauta. ~
 
+# Estructura organizativa e inclusion del menu 20/11/2025
+    |
+    +-| Estructura organizativa:
+    |
+    |   # Modularizacion y organizacion total de todos los trabajos hechos hasta la fecha
+    |       (menu, bucle principal y organizacion de archivos).
+    |
+    +-| Inclusion del menu: 
+    |
+    |   # copia de elementos de las ramas: rama_timo y rama_araceli: 
+    |       Se trajo todo el trabajo que se hizo en el menu.
+    |
+    |   # Organizacion modular y de codigo:
+    |       Arreglos e inclusion de convenciones, para una mayor organizacion 
+    |       y facilidad de lectura/edicion en el codigo.
+    |
+    +-| Inclusion del .gitignore:
+    |
+    |   # Indicaciones/Parametros del archivo:
+    |       Se le indico que no se suban las carpetas (pycache) al stage mode,
+    |       con el fin de terminar con la subida de archivos inecesarios.
 
-
+    ~ Todos los trabajos recopilados a la rama main fueron hechos por rama_araceli y rama_timo~
+    ~ Todos los cambios fueron hechos por Lauta/root ~

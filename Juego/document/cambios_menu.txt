@@ -1,5 +1,7 @@
-Documentacion de la rama principal (Criolla)
-
+Documentacion de todas las ramas:
+    > rama_araceli
+    > rama_timo
+    > rama_lauta
 
 # Modularizando menu de rama_araceli y rama_timo 20/11/25:
     |
@@ -20,4 +22,11 @@ Documentacion de la rama principal (Criolla)
     |
     |   # Se movieron a un modulo llamado [m_variables.py].
     |       + Ahi estaran todas las variables/valores mutables del menu.
-    |
+
+    @ Trabajo del menu:
+        ~ Todos los modulos y creacion del menu fueron hechos por rama_araceli ~
+        ~ La union de los modulos del menu al modulo main fueron hechos por rama_timo ~
+        ~ Todos los cambios y organizacion fueron hechos por Lauta/root ~
+
+
+

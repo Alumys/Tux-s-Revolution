@@ -1,7 +1,5 @@
 import pygame
 
-# CONSTANTES # 
-
 # --- Definición de Estados del Juego --- #
 ESTADO_MENU = "MENU"
 ESTADO_JUGAR = "JUGAR"
@@ -16,6 +14,5 @@ NOMBRE_JUEGO = "TUX'S REVOLUTION"
 ICONO = pygame.image.load('assets/images/icono_temprano.png') 
 
 # CREACION DE VARIABLES PARA SU USO #
-
 ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P))
 

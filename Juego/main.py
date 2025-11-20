@@ -1,12 +1,11 @@
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
-import pygame
+import pygame # Importacion de la Biblioteca pygame
 
-from modules.bucle_juego import ejecutar_juego
-from modules.ventana import ventana_principal
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR
+from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
-from modules.configs import FPS, RELOJ
+from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 from modules.menu import ejecutar_menu # Menu completo
 
 pygame.init()
@@ -16,22 +15,24 @@ pygame.display.set_caption(NOMBRE)
 pygame.display.set_icon(ICONO)
 
 # --- Bucle de Juego --- #
-def ejecutar_juego(pantalla, reloj):
+def ejecutar_juego(pantalla:tuple, reloj:object)->str:
     """
-    Función que gestiona el bucle de la partida (estado JUGAR).
-    Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc.
+    Gestiona el bucle de la partida (estado JUGAR).
 
-    pantalla: Superficie de Pygame para el dibujado.
-    reloj: Objeto pygame.time.Clock para control de FPS.
-    return: string con el estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
+    Args:
+        pantalla(tuple): Superficie de Pygame para el dibujado.
+        reloj(object): Objeto pygame.time.Clock para control de FPS.
     
+    Returns: 
+        str: estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
     """
+    # Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc. # RECORDAR!
     
     # Ejemplo de un bucle de juego simple
     jugando = True
     while jugando:
         reloj.tick(FPS)
-        pantalla.fill((30, 80, 30)) # Un fondo de color diferente para el juego
+        pantalla.fill((30, 80, 90)) # Un fondo de color diferente para el juego
         
         # --- Lógica del juego aca (movimiento de personaje, enemigos, etc.) ---
         # Por ejemplo, podemos tener una función dibujar_personaje(pantalla) en otro módulo.
@@ -44,13 +45,12 @@ def ejecutar_juego(pantalla, reloj):
                 if evento.key == pygame.K_ESCAPE: # Si presionan ESC, volvemos al menú
                     return ESTADO_MENU
             # Otros eventos del juego (movimiento, disparos, etc.)
-            
+              
         pygame.display.flip()
         
     return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón
 
-# --- Funciones de Estados ---
-def main():
+def main()->None:
     """
     Inicializa Pygame y ejecuta el bucle 
     de gestión de estados hasta que se alcanza el estado SALIR.
@@ -60,7 +60,6 @@ def main():
     
     corriendo = True # Esta es tu bandera original del bucle principal
     while corriendo:
-        
         if estado_actual == ESTADO_MENU:
             # Llamamos a la función que ejecuta el menú
             # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
