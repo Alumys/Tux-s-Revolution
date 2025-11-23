@@ -1,122 +1,102 @@
-import pygame
-import sys # Importa sys para un manejo de salida limpio
+import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
+import pygame # Importacion de la Biblioteca pygame
 
+<<<<<<< HEAD
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO
 from modules.ventana import LARGO_PANTALLA_P as LARGO
 from modules.ventana import ICONO
-from modules.ventana_di import (ANCHO_PANTALLA , ALTO_PANTALLA,CENTRO_X,INICIO_Y,ESPACIADO,
-                                            ANCHO_BOTON,ALTO_BOTON,BLANCO,NEGRO,AZUL_MENU,AMARILLO,GRIS_PANEL)
 
-pygame.init() # Asegúrate que esto esté antes de usar fuentes
+pygame.init()
 
 ventana_principal = pygame.display.set_mode((ANCHO, LARGO))
 pygame.display.set_caption("Tux's REVOLUTION")
+=======
+from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
+from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
+from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
+from modules.configs import FPS, RELOJ # Configuraciones nucleo main
+from modules.menu import ejecutar_menu # Menu completo
+
+pygame.init()
+
+# Configs. Ventana principal: (visual y nombre)
+pygame.display.set_caption(NOMBRE)
+>>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
 pygame.display.set_icon(ICONO)
 
-
-def manejar_acciones_boton(indice):
+# --- Bucle de Juego --- #
+def ejecutar_juego(pantalla:tuple, reloj:object)->str:
     """
-    Maneja las acciones basadas en el índice del botón pulsado.
-    Ahora devuelve el estado siguiente (string).
+    Gestiona el bucle de la partida (estado JUGAR).
+
+    Args:
+        pantalla(tuple): Superficie de Pygame para el dibujado.
+        reloj(object): Objeto pygame.time.Clock para control de FPS.
+    
+    Returns: 
+        str: estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
     """
-    match indice:
-        case 0: print(">>> Iniciando el juego principal..."); return "jugar"
-        case 1: print(">>> Conectando al lobby..."); return "menu"
-        case 2: print(">>> Mostrando puntuaciones altas..."); return "menu"
-        case 3: print(">>> Abriendo opciones..."); return "menu"
-        case 4: print(">>> Mostrando los créditos..."); return "menu"
-        case 5: return "salir" # Devuelve "salir" para indicar salida
-
-# DATOS DEL MENÚ Y POSICIONES
-fuente_titulo = pygame.font.Font(None, 80)
-fuente_opciones = pygame.font.Font(None, 40)
-
-textos_botones = ["JUGAR", "MULTIJUGADOR", "PUNTUACIÓN", "OPCIONES DE JUEGO", "CRÉDITOS", "SALIR"]
-# Almacenamos los puntos del polígono, el Rect para colisiones y la posición Y del texto
-botones_data = []
-
-# Corregido el nombre de la función y la indentación interna
-def inicializar_botones_menu():
-    for i, texto in enumerate(textos_botones):
-        pos_y_centro = INICIO_Y + i * ESPACIADO + (20 if texto == "SALIR" else 0)
-
-        # Calcular los 4 vértices del diamante
-        puntos_diamante = [
-            (CENTRO_X, pos_y_centro - ALTO_BOTON // 2),
-            (CENTRO_X + ANCHO_BOTON // 2, pos_y_centro),
-            (CENTRO_X, pos_y_centro + ALTO_BOTON // 2),
-            (CENTRO_X - ANCHO_BOTON // 2, pos_y_centro)
-        ]
-
-        rect_colision = pygame.Rect(CENTRO_X - ANCHO_BOTON // 2, pos_y_centro - ALTO_BOTON // 2, ANCHO_BOTON, ALTO_BOTON)
-        botones_data.append({"puntos": puntos_diamante, "centro_y": pos_y_centro, "rect": rect_colision})
-
-# Corregido el uso de 'pantalla' por 'ventana_principal'
-def dibujar_menu():
-    ventana_principal.fill(BLANCO)
-
-    # Dibujamos el panel de fondo
-    panel_surface = pygame.Surface((ANCHO_PANTALLA, ALTO_PANTALLA), pygame.SRCALPHA)
-    pygame.draw.rect(panel_surface, GRIS_PANEL, panel_surface.get_rect(), border_radius=50)
-    ventana_principal.blit(panel_surface, (0, 0))
-
-    texto_titulo = fuente_titulo.render("TUX REVOLUTION", True, NEGRO)
-    rect_titulo = texto_titulo.get_rect(center=(CENTRO_X, 100))
-    ventana_principal.blit(texto_titulo, rect_titulo)
-
-    posicion_mouse = pygame.mouse.get_pos()
-
-    for i, data in enumerate(botones_data):
-        if data["rect"].collidepoint(posicion_mouse):
-             color = AMARILLO
-        else:
-             color = AZUL_MENU
-
-        # Dibujamos la forma de polígono (diamante) visualmente
-        pygame.draw.polygon(ventana_principal, color, data["puntos"])
-
-        # Renderizamos el texto
-        superficie_texto = fuente_opciones.render(textos_botones[i], True, NEGRO)
-        rect_texto = superficie_texto.get_rect(center=(CENTRO_X, data["centro_y"]))
-        ventana_principal.blit(superficie_texto, rect_texto)
-
-# --- Configuración Inicial ---
-inicializar_botones_menu() # Llama a la función corregida
-estado_actual = "menu" # Define que el programa inicia en el menú
-
-
-corriendo = True # bandera de bucle principal
-while corriendo:
-
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
-            corriendo = False
+    # Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc. # RECORDAR!
+    
+    # Ejemplo de un bucle de juego simple
+    jugando = True
+    while jugando:
+        reloj.tick(FPS)
+        pantalla.fill((30, 80, 90)) # Un fondo de color diferente para el juego
         
+        # --- Lógica del juego aca (movimiento de personaje, enemigos, etc.) ---
+        # Por ejemplo, podemos tener una función dibujar_personaje(pantalla) en otro módulo.
+        
+        # --- Manejo de Eventos del Juego ---
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return ESTADO_SALIR # Si cierran la ventana, salimos del juego
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE: # Si presionan ESC, volvemos al menú
+                    return ESTADO_MENU
+            # Otros eventos del juego (movimiento, disparos, etc.)
+              
+        pygame.display.flip()
+        
+    return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón
 
-        if estado_actual == "menu":
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                for i, data in enumerate(botones_data):
-                    if data["rect"].collidepoint(evento.pos):
-                        accion = manejar_acciones_boton(i)
-                        if accion == "salir":
-                            corriendo = False
-                        elif accion == "jugar":
-                            estado_actual = "juego" 
-        elif estado_actual == "juego":
-             # Ejemplo: presionar ESCAPE para volver al menú
-             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                 estado_actual = "menu"
+def main()->None:
+    """
+    Inicializa Pygame y ejecuta el bucle 
+    de gestión de estados hasta que se alcanza el estado SALIR.
+    """
+    # La variable que controla en qué parte del juego estamos
+    estado_actual = ESTADO_MENU 
+    
+    corriendo = True # Esta es tu bandera original del bucle principal
+    while corriendo:
+        if estado_actual == ESTADO_MENU:
+            # Llamamos a la función que ejecuta el menú
+            # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
+            estado_actual = ejecutar_menu(ventana_principal, RELOJ)
+            
+            # Si el menú nos dice que salgamos, detenemos el bucle principal
+            if estado_actual == ESTADO_SALIR:
+                corriendo = False
+                
+        elif estado_actual == ESTADO_JUGAR:
+            # Llamamos a la función que ejecuta la partida
+            estado_actual = ejecutar_juego(ventana_principal, RELOJ)
+            
+            # Si el juego nos dice que salgamos, detenemos el bucle principal
+            if estado_actual == ESTADO_SALIR:
+                corriendo = False
+            # Si el juego devuelve ESTADO_MENU, el bucle continuará y pasará al if ESTADO_MENU
 
-    if estado_actual == "menu":
-        dibujar_menu() # Dibuja todos los elementos del menú
-    elif estado_actual == "juego":
-        # Aquí es donde pondrás tu código del juego real más adelante
-        ventana_principal.fill((0, 100, 0)) # Fondo verde temporal de ejemplo
-        font = pygame.font.Font(None, 50)
-        text = font.render("AQUÍ VA TU JUEGO", True, BLANCO)
-        ventana_principal.blit(text, (100, 100))
+        # Nota: Aquí no hay un pygame.display.update() global porque
+        # cada función de estado (menu, juego) se encarga de su propia actualización.
+        # Si tuvieras un estado de "Cargando" que quisiera dibujar algo diferente,
+        # lo pondrías aquí o dentro de la función de ese estado.
 
-    # --- Actualizador de Pantalla Único (movido al final) ---
-    pygame.display.update() 
+    # --- Fin del Bucle Principal ---
+    pygame.quit()
+    sys.exit()
 
-pygame.quit()
+if __name__ == "__main__":
+    main()
