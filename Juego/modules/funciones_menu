@@ -1,16 +1,9 @@
-import pygame
-
-# Inicializa Pygame
-pygame.init()
-
-#  CONSTANTES Y CONFIGURACIÓN
-ANCHO_PANTALLA, ALTO_PANTALLA = 800, 600
-CENTRO_X = ANCHO_PANTALLA // 2
-INICIO_Y, ESPACIADO = 225, 64
-ANCHO_BOTON, ALTO_BOTON = 300, 60
-BLANCO, NEGRO = (255, 255, 255), (0, 0, 0)
-AZUL_MENU, AMARILLO = (0, 102, 204), (255, 255, 0)
-GRIS_PANEL = (30, 30, 45, 180)
+import pygame 
+# Así es como debe verse la importación COMPLETA:
+from modules.dimensiones_de_ventana import (
+    ANCHO_PANTALLA, ALTO_PANTALLA, CENTRO_X, INICIO_Y, ESPACIADO, 
+    ANCHO_BOTON, ALTO_BOTON, BLANCO, NEGRO, AZUL_MENU, AMARILLO, GRIS_PANEL
+)
 
 pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 pygame.display.set_caption("Menu de Tux Revolution (Diamante)")
