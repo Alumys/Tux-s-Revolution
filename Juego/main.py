@@ -1,16 +1,6 @@
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
 
-<<<<<<< HEAD
-from modules.ventana import ANCHO_PANTALLA_P as ANCHO
-from modules.ventana import LARGO_PANTALLA_P as LARGO
-from modules.ventana import ICONO
-
-pygame.init()
-
-ventana_principal = pygame.display.set_mode((ANCHO, LARGO))
-pygame.display.set_caption("Tux's REVOLUTION")
-=======
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
 from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
@@ -22,7 +12,6 @@ pygame.init()
 
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
->>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
 pygame.display.set_icon(ICONO)
 
 # --- Bucle de Juego --- #
