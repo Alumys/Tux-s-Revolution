@@ -1,49 +1,49 @@
-import pygame
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
+import pygame # Importacion de la Biblioteca pygame
 
-# Importar constantes de ventana
+<<<<<<< HEAD
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO
-from modules.ventana import LARGO_PANTALLA_P as ALTO
+from modules.ventana import LARGO_PANTALLA_P as LARGO
 from modules.ventana import ICONO
 
-# Importar la función del menú (desde la carpeta 'prueba')
-from prueba.menu import ejecutar_menu 
-
-# --- Inicialización de Pygame (solo se inicia aca asi no da problemas y empieza una sola vez) ---
 pygame.init()
 
-# Configuración de la ventana principal
-ventana_principal = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("TUX'S REVOLUTION")
+ventana_principal = pygame.display.set_mode((ANCHO, LARGO))
+pygame.display.set_caption("Tux's REVOLUTION")
+=======
+from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
+from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
+from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
+from modules.configs import FPS, RELOJ # Configuraciones nucleo main
+from modules.menu import ejecutar_menu # Menu completo
+
+pygame.init()
+
+# Configs. Ventana principal: (visual y nombre)
+pygame.display.set_caption(NOMBRE)
+>>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
 pygame.display.set_icon(ICONO)
 
-# Reloj para controlar los FPS
-RELOJ = pygame.time.Clock()
-FPS = 60
-
-# --- Definición de Estados del Juego ---
-ESTADO_MENU = "MENU"
-ESTADO_JUGAR = "JUGAR"
-ESTADO_SALIR = "SALIR"
-
-# --- Funciones de Estados ---
-
-def ejecutar_juego(pantalla, reloj):
+# --- Bucle de Juego --- #
+def ejecutar_juego(pantalla:tuple, reloj:object)->str:
     """
-    Función que gestiona el bucle de la partida (estado JUGAR).
-    Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc.
+    Gestiona el bucle de la partida (estado JUGAR).
 
-    pantalla: Superficie de Pygame para el dibujado.
-    reloj: Objeto pygame.time.Clock para control de FPS.
-    return: string con el estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
+    Args:
+        pantalla(tuple): Superficie de Pygame para el dibujado.
+        reloj(object): Objeto pygame.time.Clock para control de FPS.
     
+    Returns: 
+        str: estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
     """
+    # Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc. # RECORDAR!
     
     # Ejemplo de un bucle de juego simple
     jugando = True
     while jugando:
         reloj.tick(FPS)
-        pantalla.fill((30, 80, 30)) # Un fondo de color diferente para el juego
+        pantalla.fill((30, 80, 90)) # Un fondo de color diferente para el juego
         
         # --- Lógica del juego aca (movimiento de personaje, enemigos, etc.) ---
         # Por ejemplo, podemos tener una función dibujar_personaje(pantalla) en otro módulo.
@@ -56,26 +56,21 @@ def ejecutar_juego(pantalla, reloj):
                 if evento.key == pygame.K_ESCAPE: # Si presionan ESC, volvemos al menú
                     return ESTADO_MENU
             # Otros eventos del juego (movimiento, disparos, etc.)
-            
+              
         pygame.display.flip()
         
     return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón
 
-# --- Bucle Principal del Aplicación ---
-
-def main():
+def main()->None:
     """
-    Función principal de la aplicación. Inicializa Pygame y ejecuta el bucle
+    Inicializa Pygame y ejecuta el bucle 
     de gestión de estados hasta que se alcanza el estado SALIR.
-    
     """
-    
     # La variable que controla en qué parte del juego estamos
     estado_actual = ESTADO_MENU 
     
     corriendo = True # Esta es tu bandera original del bucle principal
     while corriendo:
-        
         if estado_actual == ESTADO_MENU:
             # Llamamos a la función que ejecuta el menú
             # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
