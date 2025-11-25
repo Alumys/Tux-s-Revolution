@@ -1,5 +1,5 @@
 import pygame
-from creacion_de_ladrillos.tamaño_ladrillo import ANCHO_LADRILLO, ALTO_LADRILLO, COLOR_LADRILLO
+from creacion_de_ladrillos.tamaño_ladrillo import ALTO_LADRILLO, ANCHO_LADRILLO, COLOR_LADRILLO
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
 
 
@@ -10,7 +10,7 @@ LADRILLOS= []  ##lista,aca se van a guardar los ladrillos
 
 
 for fila in range(5): # aca se imprimira 5 filas
-    for columna in range(10): #aca se imprimira 10 columnas 
+    for columna in range(12): #aca se imprimira 10 columnas 
         x = columna * (ANCHO_LADRILLO + 10)     #10 pixeles de separacion horizontal
         y = fila * (ALTO_LADRILLO + 10)         # 10 pixeles de separacion vertical
 
