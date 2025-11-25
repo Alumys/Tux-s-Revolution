@@ -1,12 +1,14 @@
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
 
+
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_RANKING # Estados en el juego
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 from modules.menu import ejecutar_menu # Menu completo
+from modules.pantalla_ranking import ejecutar_ranking
 
 pygame.init()
 
@@ -72,6 +74,10 @@ def main()->None:
         elif estado_actual == ESTADO_JUGAR:
             # Llamamos a la función que ejecuta la partida
             estado_actual = ejecutar_juego(ventana_principal, RELOJ)
+            
+        elif estado_actual == ESTADO_RANKING:   
+            estado_actual = ejecutar_ranking(ventana_principal, RELOJ)
+    
             
             # Si el juego nos dice que salgamos, detenemos el bucle principal
             if estado_actual == ESTADO_SALIR:
