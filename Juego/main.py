@@ -7,6 +7,7 @@ from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO 
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 from modules.menu import ejecutar_menu # Menu completo
+from modules.personajes import crear_paleta, crear_pelota, dibujar_entidad
 
 pygame.init()
 
@@ -45,7 +46,9 @@ def ejecutar_juego(pantalla:tuple, reloj:object)->str:
                 if evento.key == pygame.K_ESCAPE: # Si presionan ESC, volvemos al menú
                     return ESTADO_MENU
             # Otros eventos del juego (movimiento, disparos, etc.)
-              
+        
+
+
         pygame.display.flip()
         
     return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón

@@ -11,6 +11,14 @@ Se escribira en un formato breve y limpio, marcando la fecha del cambio y las mo
             Se guardaron los archivos que contienen las fuentes
             que utilizaremos para las pruebas.
 
+
+# Cambios 22/11/2025.
+
+    * Carpeta Dependencias del modulos personajes.py
+        + pj_colores.py -> representaciones con colores.
+        + 
     
+    * Modulo personajes.py
+        +
 
 
