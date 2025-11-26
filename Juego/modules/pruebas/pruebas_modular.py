@@ -34,24 +34,9 @@ def crear_pelota(x, y, tamano, color=(255, 255, 255), velocidad_x=5, velocidad_y
 
     return pelota_rect, imagen, velocidad_x, velocidad_y
 
-
-def dibujar_entidad(pantalla, imagen, rect):
-    pantalla.blit(imagen, rect)
-
-
 # --------------------------------------------------------------
 # FUNCIONES DE MOVIMIENTO
 # --------------------------------------------------------------
-
-def movimiento_personaje(paleta_rect, velocidad=6, limite_izq=0, limite_der=800):
-    """ Mueve la paleta según las teclas presionadas. """
-    teclas = pygame.key.get_pressed()
-
-    if teclas[pygame.K_LEFT] and paleta_rect.left > limite_izq:
-        paleta_rect.x -= velocidad
-    if teclas[pygame.K_RIGHT] and paleta_rect.right < limite_der:
-        paleta_rect.x += velocidad
-
 
 def movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ancho, alto):
     """ Mueve la pelota y maneja todas las colisiones. """
