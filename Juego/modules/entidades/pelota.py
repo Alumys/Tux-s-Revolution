@@ -2,16 +2,23 @@ import os
 import pygame
 
 from ..ventana import LARGO_PANTALLA_P
-# FUNCIONES PRINCIPALES DE LA PELOTA #
 
-# Configuracion #
+# ! Configurar definiendo los valores de las variables/constantes !#
+# velocidad de movimiento #
 velocidades_xx = 5
 velocidades_yy = 5
 colores = ()
-# Configuracion Wine/Vino#
-velocidad_wine_xx = 5
-velocidad_wine_yy = 5
-colores = ()
+
+# posicionamiento
+POS_X_PELOTA = 350 
+POS_Y_PELOTA = LARGO_PANTALLA_P - 140
+
+# dimensiones 
+tamano_pelota = 40  
+# @~Lau nota:~
+# Configuracion Wine/Vino:
+# Luego colocar el codigo despues, ya sea rama_araceli/rama_lauta
+
 # Funcion crear pelota 
 def crear_pelota(x, y, tamano, color=(255, 255, 255), velocidad_x=velocidades_xx, velocidad_y=-velocidades_yy):
     ruta_imagen = "assets/images/pelotas/prueba_pelota.png"
@@ -50,7 +57,5 @@ def movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ancho, alto):
         vel_y *= -1
 
     return vel_x, vel_y
-
-pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(350, LARGO_PANTALLA_P - 140, 40) # Pelota ORIGINAL
 
 #LUEGO CREAR LA VERSION WINE#

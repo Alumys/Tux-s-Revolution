@@ -2,25 +2,24 @@ import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de a
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
 
+# VENTANA #
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
-from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
+from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
+# MENU #
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
-
-# Importacion de funciones #
-from modules.entidades.entidades import dibujar_entidad # Graficar en pantalla las entidades
+# ENTIDADES #
+from modules.entidades.entidades import dibujar_entidad # graficador de entidades
+# paleta:
 from modules.entidades.paleta import crear_paleta # creador de paletas
 from modules.entidades.paleta import movimiento_paleta # movimiento de paleta
-
-from modules.entidades.pelota import crear_pelota # creador de pelotas
-from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
-from modules.entidades.entidades import dibujar_entidad # graficador de entidades
-# Importacion de constantes y variables #
-
-#############
 from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dibujado MOVIMIENTO / VISUAL
+# pelota:
+from modules.entidades.pelota import crear_pelota # creador de pelotas
+from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
+from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
 
 pygame.init()
 
@@ -34,8 +33,11 @@ def ejecutar_juego(pantalla, reloj):
     Maneja paleta, pelota, movimiento y colisiones.
     """
 
-    # ---- Crear entidades mutables ----
-    pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(350, ALTO - 140, 40) # no se puede retirar porque es sus elementos van mutando siempre
+    # ---- Crear entidades mutables ---- #
+    pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
+    # @~LAU-NOTA:~
+    # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
+    # es posible moverlo, pero modularizarlo no... es complejo de momento
 
     jugando = True
     while jugando:
@@ -52,9 +54,8 @@ def ejecutar_juego(pantalla, reloj):
                     return ESTADO_MENU
 
         # MOVIMIENTOS ENTIDADES
-        movimiento_paleta(paleta_rect) # nota: luego colocar un condicional para el RED HAT
-        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) 
-        # nota: luego colocar un condicional para wine
+        movimiento_paleta(paleta_rect) # @~LAU~ nota-PALETA: luego colocar un condicional para el RED HAT
+        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) # @~LAU~ nota-PELOTA: luego colocar un condicional para wine
 
         # blitteo/dibujado
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
