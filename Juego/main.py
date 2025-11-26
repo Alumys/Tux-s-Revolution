@@ -1,3 +1,4 @@
+import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de archivos
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
 
@@ -7,7 +8,19 @@ from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO 
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 from modules.menu import ejecutar_menu # Menu completo
-from modules.personajes import crear_paleta, crear_pelota, dibujar_entidad
+
+# Importacion de funciones #
+from modules.entidades.entidades import dibujar_entidad # Graficar en pantalla las entidades
+from modules.entidades.paleta import crear_paleta # creador de paletas
+from modules.entidades.paleta import movimiento_paleta # movimiento de paleta
+
+from modules.entidades.pelota import crear_pelota # creador de pelotas
+from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
+from modules.entidades.entidades import dibujar_entidad # graficador de entidades
+# Importacion de constantes y variables #
+
+#############
+from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dibujado MOVIMIENTO / VISUAL
 
 pygame.init()
 
@@ -15,43 +28,41 @@ pygame.init()
 pygame.display.set_caption(NOMBRE)
 pygame.display.set_icon(ICONO)
 
-# --- Bucle de Juego --- #
-def ejecutar_juego(pantalla:tuple, reloj:object)->str:
+def ejecutar_juego(pantalla, reloj):
     """
-    Gestiona el bucle de la partida (estado JUGAR).
+    Bucle principal del estado JUGAR.
+    Maneja paleta, pelota, movimiento y colisiones.
+    """
 
-    Args:
-        pantalla(tuple): Superficie de Pygame para el dibujado.
-        reloj(object): Objeto pygame.time.Clock para control de FPS.
-    
-    Returns: 
-        str: estado de salida ("MENU" si se pulsa ESC, "SALIR" si se cierra la ventana).
-    """
-    # Aquí se debe implementar toda la lógica de juego: movimientos, colisiones, etc. # RECORDAR!
-    
-    # Ejemplo de un bucle de juego simple
+    # ---- Crear entidades mutables ----
+    pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(350, ALTO - 140, 40) # no se puede retirar porque es sus elementos van mutando siempre
+
     jugando = True
     while jugando:
         reloj.tick(FPS)
-        pantalla.fill((30, 80, 90)) # Un fondo de color diferente para el juego
-        
-        # --- Lógica del juego aca (movimiento de personaje, enemigos, etc.) ---
-        # Por ejemplo, podemos tener una función dibujar_personaje(pantalla) en otro módulo.
-        
-        # --- Manejo de Eventos del Juego ---
+        pantalla.fill((30, 80, 90))
+
+        # ---- Eventos ----
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                return ESTADO_SALIR # Si cierran la ventana, salimos del juego
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE: # Si presionan ESC, volvemos al menú
-                    return ESTADO_MENU
-            # Otros eventos del juego (movimiento, disparos, etc.)
-        
+                return ESTADO_SALIR
 
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    return ESTADO_MENU
+
+        # MOVIMIENTOS ENTIDADES
+        movimiento_paleta(paleta_rect) # nota: luego colocar un condicional para el RED HAT
+        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) 
+        # nota: luego colocar un condicional para wine
+
+        # blitteo/dibujado
+        dibujar_entidad(pantalla, paleta_img, paleta_rect)
+        dibujar_entidad(pantalla, pelota_img, pelota_rect)
 
         pygame.display.flip()
-        
-    return ESTADO_SALIR # Si el bucle del juego termina por alguna otra razón
+
+    return ESTADO_SALIR
 
 def main()->None:
     """
