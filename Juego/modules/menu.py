@@ -14,8 +14,6 @@ def manejar_acciones_boton(indice):
 
     prametro indice: Índice (0-5) del botón seleccionado.
     return: string con el nuevo estado ("JUGAR", "SALIR" o "MENU").
-    
-    
     """
     if indice == 0:
         print(">>> Iniciando el juego principal...")
