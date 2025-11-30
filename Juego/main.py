@@ -8,7 +8,7 @@ from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la panta
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_RANKING # Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
 # ENTIDADES #
 from modules.entidades.entidades import dibujar_entidad # graficador de entidades
@@ -20,6 +20,8 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
+# agregando la importancion para el ranking
+from modules.pantalla_ranking import ejecutar_ranking
 
 pygame.init()
 
@@ -76,7 +78,9 @@ def main()->None:
     
     corriendo = True # Esta es tu bandera original del bucle principal
     while corriendo:
+        
         if estado_actual == ESTADO_MENU:
+            pygame.event.clear()
             # Llamamos a la función que ejecuta el menú
             # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
             estado_actual = ejecutar_menu(ventana_principal, RELOJ)
@@ -86,8 +90,14 @@ def main()->None:
                 corriendo = False
                 
         elif estado_actual == ESTADO_JUGAR:
+            pygame.event.clear()
             # Llamamos a la función que ejecuta la partida
             estado_actual = ejecutar_juego(ventana_principal, RELOJ)
+            
+        elif estado_actual == ESTADO_RANKING:
+            pygame.event.clear()
+            # llamamos a la funcion de los trofeos
+            estado_actual = ejecutar_ranking(ventana_principal, RELOJ)
             
             # Si el juego nos dice que salgamos, detenemos el bucle principal
             if estado_actual == ESTADO_SALIR:

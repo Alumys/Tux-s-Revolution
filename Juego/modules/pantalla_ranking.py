@@ -1,18 +1,21 @@
 import pygame
-from modules.puntuaciones import cargar_ranking
-# Importamos tus colores (ajusta si la ruta es diferente)
-try:
-    from modules.dependencias_menu.m_colores import BLANCO, NEGRO, AZUL_MENU, AMARILLO
-except ImportError:
-    BLANCO = (255, 255, 255)
-    NEGRO = (0, 0, 0)
-    AZUL_MENU = (0, 102, 204)
-    AMARILLO = (255, 255, 0)
+from modules.puntuaciones import cargar_ranking # importamos el modulo puntaciones para cargar el ranking
+from modules.dependencias_menu.m_colores import BLANCO, NEGRO, AZUL_MENU, AMARILLO # importamos los colores
+
 
 def ejecutar_ranking(pantalla, reloj):
     """
-    Muestra la lista de los mejores puntajes.
-    Vuelve al menú cuando se presiona ESCAPE.
+    Despliega la pantalla de mejores puntajes (High Scores).
+    
+    Lee los datos desde el archivo JSON y los renderiza en una lista.
+    Mantiene el control del bucle hasta que el usuario presiona ESC.
+
+    Args:
+        pantalla (pygame.Surface): La superficie principal donde dibujar.
+        reloj (pygame.time.Clock): Para controlar los FPS.
+
+    Returns:
+        str: Devuelve "MENU" cuando el usuario decide salir.
     """
     # 1. Cargar la lista de datos AL INICIO (para no leer el disco 60 veces por segundo)
     lista_top_5 = cargar_ranking()

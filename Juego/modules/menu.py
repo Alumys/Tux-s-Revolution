@@ -23,7 +23,7 @@ def manejar_acciones_boton(indice):
         return "MENU" # Después de esta acción, volvemos al menú
     elif indice == 2:
         print(">>> Mostrando puntuaciones altas...")
-        return "MENU" # Después de esta acción, volvemos al menú
+        return "RANKING" # Después de esta acción, volvemos al menú
     elif indice == 3:
         print(">>> Abriendo opciones...")
         return "MENU" # Después de esta acción, volvemos al menú

@@ -24,25 +24,33 @@ def cargar_ranking():
 
 def guardar_puntaje_en_ranking(nombre, puntaje):
     """
-    Toma un nombre y un puntaje, lo agrega al ranking existente,
-    ordena la lista, mantiene solo el TOP 5 y guarda todo en el JSON.
+    Agrega un nuevo puntaje al ranking, lo ordena y guarda los 5 mejores.
+
+    Esta función realiza los siguientes pasos:
+    1. Carga el historial existente desde el archivo JSON.
+    2. Agrega el puntaje actual del jugador.
+    3. Ordena la lista de mayor a menor basándose en los puntos.
+    4. Recorta la lista para mantener solo el Top 5.
+    5. Sobrescribe el archivo JSON con la lista actualizada.
+
+    Args:
+        nombre (str): El nombre o apodo ingresado por el jugador.
+        puntaje (int): La cantidad de puntos obtenidos en la partida.
     """
-    # 1. Cargar los puntajes que ya existen
-    lista_ranking = cargar_ranking()
     
-    # 2. Crear el nuevo registro (un diccionario)
-    nuevo_registro = {"nombre": nombre, "puntos": puntaje}
+    lista_ranking = cargar_ranking() # 1. Cargar los puntajes que ya existen
+    
+    
+    nuevo_registro = {"nombre": nombre, "puntos": puntaje} # 2. Crear el nuevo registro (un diccionario)
     lista_ranking.append(nuevo_registro)
     
-    # 3. Ordenar la lista por puntos de mayor a menor.
-    # Usamos itemgetter, que es una forma eficiente y permitida de ordenar diccionarios sin usar lambda.
-    from operator import itemgetter
-    # 'reverse=True' es para que sea de mayor a menor
-    lista_ranking.sort(key=itemgetter("puntos"), reverse=True)
+    
+    # 3. Ordenar la lista (Lógica principal de ordenamiento) Como tenemos una lista de diccionarios, sort() no sabe por qué campo ordenar.
+    from operator import itemgetter # Usamos itemgetter("puntos") para indicarle que debe comparar los valores de la clave "puntos".
+    lista_ranking.sort(key=itemgetter("puntos"), reverse=True) # 'reverse=True' es para que sea de mayor a menor
     
     # 4. Mantener solo los mejores 5 (Top 5)
-    # Esto corta la lista desde el inicio hasta el elemento 5
-    top_5 = lista_ranking[:5]
+    top_5 = lista_ranking[:5] # Usamos slicing de listas para quedarnos con los primeros 5 elementos.
     
     # 5. Guardar la lista actualizada en el archivo JSON
     try:
