@@ -81,4 +81,4 @@ def ejecutar_pantalla_fin(pantalla, reloj, puntaje_final, gano_partida):
     # Guardamos el puntaje
     guardar_puntaje_en_ranking(nombre_ingresado, puntaje_final)
     
-    return "MENU"
+    return "RANKING"

@@ -22,6 +22,8 @@ from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # 
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
 # agregando la importancion para el ranking
 from modules.pantalla_ranking import ejecutar_ranking
+#PRUEBA
+from modules.fin_juego import ejecutar_pantalla_fin
 
 pygame.init()
 
@@ -41,7 +43,7 @@ def ejecutar_juego(pantalla, reloj):
     # @~LAU-NOTA:~
     # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
     # es posible moverlo, pero modularizarlo no... es complejo de momento
-
+    puntaje_actual = 6000
     jugando = True
     while jugando:
         reloj.tick(FPS)
@@ -55,6 +57,16 @@ def ejecutar_juego(pantalla, reloj):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_ESCAPE:
                     return ESTADO_MENU
+                
+                if evento.key == pygame.K_g:
+                    print("TRUCO ACTIVADO! GANASTE")
+                    nuevo_estado = ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, True)
+                    return nuevo_estado
+                
+                if evento.key == pygame.K_p:
+                    print("TRUCO ACTIVADO! PERDISTE")
+                    nuevo_estado = ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False)
+                    return nuevo_estado
 
         # MOVIMIENTOS ENTIDADES
         movimiento_paleta(paleta_rect) # @~LAU~ nota-PALETA: luego colocar un condicional para el RED HAT
