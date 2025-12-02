@@ -6,7 +6,7 @@ try:
 except ImportError:
     BLANCO, NEGRO, AZUL_MENU, AMARILLO, ROJO, VERDE = (255, 255, 255), (0, 0, 0), (0, 102, 204), (255, 255, 0), (200, 0, 0), (0, 200, 0)
 
-def ejecutar_opciones(pantalla, reloj):
+def ejecutar_sonidos(pantalla, reloj):
     """
     Pantalla de configuración de volumen.
     """

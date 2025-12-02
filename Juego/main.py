@@ -7,7 +7,7 @@ from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuale
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_PUNTOS, ESTADO_AUDIO # Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
 # ENTIDADES #
 from modules.entidades.entidades import dibujar_entidad # graficador de entidades
@@ -25,6 +25,16 @@ from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
 ##
 from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
 from modules.entidades.tiradas_objetos import crear_drop, actualizar_drop, dibujar_drop, drop_colisiona_paleta, aplicar_power_up
+
+# agregando la importacion para sl sistema de puntos
+from modules.fin_juego import ejecutar_pantalla_fin
+# pantalla del puntaje
+from modules.pantalla_ranking import ejecutar_ranking
+#sonido
+from modules.sonido import ejecutar_sonidos
+
+#vidas
+from modules.entidades.vidas import dibujar_vidas
 
 #
 pygame.init()
@@ -50,6 +60,15 @@ def ejecutar_juego(pantalla, reloj):
     # es posible moverlo, pero modularizarlo no... es complejo de momento
     # --- LADRILLOS ---
     
+    #Variable del puntaje
+    puntaje_actual = 0
+    
+    
+    
+
+    #fuente para el puntaje:
+    fuente_hud = pygame.font.SysFont("Arial", 30, bold=True)
+    
     jugando = True
     while jugando:
         reloj.tick(FPS)
@@ -63,14 +82,26 @@ def ejecutar_juego(pantalla, reloj):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_ESCAPE:
                     return ESTADO_MENU
+                #TRUCO TECLA K
+                if evento.key == pygame.K_k:
+                    ladrillos.clear()
 
         # 1) movimiento de entidades
         movimiento_paleta(paleta_rect)
         vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
 
-        # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos)
-        vel_y = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
-
+        # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
+        vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
+        puntaje_actual += puntos_nuevos
+        
+        print(f"Ladrillos restantes: {len(ladrillos)}")
+        if len(ladrillos) == 10:
+            print("VICTORIA DETECTADA")
+            return ejecutar_pantalla_fin(pantalla,reloj, puntaje_actual, True)
+        
+        
+        
+        
         # 3) actualizar y dibujar drops (IMPORTANTE: iterar sobre copia)
         for drop in drops:
             actualizar_drop(drop, ALTO)
@@ -79,6 +110,9 @@ def ejecutar_juego(pantalla, reloj):
             if drop_colisiona_paleta(drop, paleta_rect):
                 aplicar_power_up(drop, paleta_rect, pelota_rect)  # fut1uro
                 drops.remove(drop)
+                
+                
+        
 
 
         # 4) dibujado entidades y ladrillos
@@ -86,6 +120,14 @@ def ejecutar_juego(pantalla, reloj):
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
         dibujar_ladrillos(pantalla, ladrillos)
 
+        #dibujando puntaje
+        texto_superficie = fuente_hud.render(f"PUNTOS: {puntaje_actual}", True, (255, 255, 255))
+        
+        # Lo ubicamos a la derecha (Ancho pantalla - Ancho texto - Margen)
+        pos_x = pantalla.get_width() - texto_superficie.get_width() - 20
+        pos_y = 450 # Un poco separado del techo
+        
+        pantalla.blit(texto_superficie, (pos_x, pos_y))
         pygame.display.flip()
 
     return ESTADO_SALIR
@@ -112,7 +154,14 @@ def main()->None:
         elif estado_actual == ESTADO_JUGAR:
             # Llamamos a la función que ejecuta la partida
             estado_actual = ejecutar_juego(ventana_principal, RELOJ)
+        
+        elif estado_actual == ESTADO_PUNTOS:   
+            # llamamos a la funcion de los trofeos
+            estado_actual = ejecutar_ranking(ventana_principal, RELOJ)
             
+        elif estado_actual == ESTADO_AUDIO:    
+            estado_actual = ejecutar_sonidos(ventana_principal, RELOJ)
+                    
             # Si el juego nos dice que salgamos, detenemos el bucle principal
             if estado_actual == ESTADO_SALIR:
                 corriendo = False

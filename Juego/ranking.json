@@ -1,22 +1,10 @@
 [
     {
-        "nombre": "lau",
-        "puntos": 6000
+        "nombre": "ara",
+        "puntos": 4000
     },
     {
-        "nombre": "luiz",
-        "puntos": 6000
-    },
-    {
-        "nombre": "hola123",
-        "puntos": 6000
-    },
-    {
-        "nombre": "timoo",
-        "puntos": 5000
-    },
-    {
-        "nombre": "tino",
-        "puntos": 5000
+        "nombre": "prueba12",
+        "puntos": 200
     }
 ]

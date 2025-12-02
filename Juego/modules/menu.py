@@ -61,10 +61,10 @@ def manejar_acciones_boton(indice: int) -> str:
         return "JUGAR"
     elif indice == 1:
         print(">>> Mostrando puntuaciones altas...")
-        return "MENU"
+        return "PUNTOS"
     elif indice == 2:
         print(">>> Abriendo audio...")
-        return "MENU"
+        return "AUDIO"
     elif indice == 3:
         print(">>> Mostrando los créditos...")
         return "MENU"
