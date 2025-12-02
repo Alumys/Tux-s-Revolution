@@ -1,7 +1,6 @@
 import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de archivos
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
-
 # VENTANA #
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuales de la pantalla 
@@ -29,6 +28,7 @@ from modules.entidades.tiradas_objetos import crear_drop, actualizar_drop, dibuj
 
 #
 pygame.init()
+pygame.font.init()
 
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)

@@ -1,5 +1,6 @@
 import pygame
 
+pygame.font.init()
 
 # --- Definición de Estados del Juego --- #
 ESTADO_MENU = "MENU"
@@ -33,3 +34,5 @@ FONDO_MENU = pygame.transform.scale(FONDO_JUEGO, (800, 600))
 BOTON_OPCION = pygame.image.load('assets/images/fondos/fondo_menu.png').convert_alpha()
 BOTON_OPCION = pygame.transform.scale(BOTON_OPCION, (300, 200))
  
+# FUENTE
+FUENTE_GENERAL = pygame.font.Font("assets/fonts/CARTNIST.TTF", 32)

@@ -1,10 +1,39 @@
 import pygame
 
 from modules.ventana import LARGO_PANTALLA_P
-from modules.dependencias_menu.m_constantes import ANCHO_PANTALLA, CENTRO_X, INICIO_Y, ESPACIADO, ALTO_DIAMANTE, ANCHO_DIAMANTE
-from modules.dependencias_menu.m_colores import NEGRO, BLANCO, AZUL_MENU, AMARILLO, GRIS_PANEL
-from modules.dependencias_menu.m_variables import textos_botones
 from modules.ventana import FONDO_MENU, TITULO_JUEGO, BOTON_OPCION
+from modules.ventana import FUENTE_GENERAL
+
+ANCHO_PANTALLA = 800  # Mantener para la lógica interna del menú
+# CONFIGURACIONES #
+
+# Cordenadas
+CENTRO_X = ANCHO_PANTALLA // 2
+INICIO_Y = 225
+
+# Dimensiones
+CENTRO_X = ANCHO_PANTALLA // 2
+INICIO_Y = 225
+ESPACIADO = 64
+
+# Config-Diamante                 
+ALTO_DIAMANTE = 60 # Este valor sera el alto del diamante
+ANCHO_DIAMANTE = 300  # Este valor sera el alto del diamante
+
+
+# Botones
+textos_botones = ["JUGAR", "MULTIJUGADOR", "PUNTUACIÓN", "OPCIONES DE JUEGO", "CRÉDITOS", "SALIR"] # Creamos una lista con las opciones
+
+# Colores
+
+NEGRO = (0, 0, 0)
+BLANCO = (255, 255, 255)
+AZUL_MENU = (0, 102, 204)
+AMARILLO = (255, 255, 0)
+GRIS_PANEL = (30, 30, 45, 180) # Con Alpha (transparencia)
+
+
+
 # FUNCIÓN DE ACCIÓN CENTRAL
 # Modificada para devolver un string que represente el nuevo estado
 def manejar_acciones_boton(indice):
@@ -46,10 +75,6 @@ def ejecutar_menu(pantalla, reloj):
     return: string con el nuevo estado ("JUGAR" o "SALIR").
     
     """
-    
-    # Fuentes (Se inicializan aca, dentro de la función)
-    fuente_titulo = pygame.font.Font(None, 80)
-    fuente_opciones = pygame.font.Font(None, 40)
 
     # --- PREPARACIÓN DE BOTONES ---
     botones_data = []
@@ -74,10 +99,6 @@ def ejecutar_menu(pantalla, reloj):
         
         # Almacenamos todos los datos relevantes
         botones_data.append({"puntos": puntos_diamante, "centro_y": pos_y_centro, "rect": rect_colision})
-
-    # Título (Ajustado para usar la fuente local)
-    texto_titulo = fuente_titulo.render("TUX REVOLUTION", True, NEGRO)
-    rect_titulo = texto_titulo.get_rect(center=(CENTRO_X, 100))
     
     # --- BUCLE PRINCIPAL DEL MENÚ ---
     bucle_principal_menu = True # Renombramos para evitar confusión con el de main.py
@@ -106,7 +127,6 @@ def ejecutar_menu(pantalla, reloj):
         panel_surface = pygame.Surface((ANCHO_PANTALLA, LARGO_PANTALLA_P), pygame.SRCALPHA) # Usa LARGO_PANTALLA_P del main.py
         pantalla.blit(panel_surface, (0, 0))
         pantalla.blit(TITULO_JUEGO, (145, -10))
-        #pantalla.blit(texto_titulo, rect_titulo)
 
         # Dibujado de botones (diamantes)
         for i, data in enumerate(botones_data):
@@ -118,7 +138,7 @@ def ejecutar_menu(pantalla, reloj):
             pygame.draw.polygon(pantalla, color, data["puntos"])
             
             # Renderizamos el texto del botón
-            superficie_texto = fuente_opciones.render(textos_botones[i], True, NEGRO)
+            superficie_texto = FUENTE_GENERAL.render(textos_botones[i], True, NEGRO)
             rect_texto = superficie_texto.get_rect(center=(CENTRO_X, data["centro_y"]))
             pantalla.blit(superficie_texto, rect_texto)
             
