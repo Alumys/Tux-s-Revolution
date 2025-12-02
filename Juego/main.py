@@ -8,7 +8,7 @@ from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la panta
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_RANKING # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_RANKING, ESTADO_OPCIONES # Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
 # ENTIDADES #
 from modules.entidades.entidades import dibujar_entidad # graficador de entidades
@@ -22,8 +22,11 @@ from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # 
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
 # agregando la importancion para el ranking
 from modules.pantalla_ranking import ejecutar_ranking
-#PRUEBA
+#pantalla del puntaje
 from modules.fin_juego import ejecutar_pantalla_fin
+
+# sonido
+from modules.opciones import ejecutar_opciones
 
 pygame.init()
 
@@ -32,11 +35,26 @@ pygame.display.set_caption(NOMBRE)
 
 pygame.display.set_icon(ICONO)
 
+#sonidos
+pygame.mixer.music.load("assets/sounds/menu.wav") 
+pygame.mixer.music.set_volume(0.5) # Volumen inicial (50%)
+pygame.mixer.music.play(-1) # El -1 hace que se repita infinitamente (loop)
+
 def ejecutar_juego(pantalla, reloj):
     """
     Bucle principal del estado JUGAR.
     Maneja paleta, pelota, movimiento y colisiones.
     """
+    
+    puntaje = 100
+    fuente_hud = pygame.font.Font(None, 36) # Fuente para el texto
+    
+    try:
+        sonido_rebote = pygame.mixer.Sound("assets/sounds/golpe_pelota.wav")
+        sonido_rebote.set_volume(0.8)
+    except Exception as no:
+        print(f"no se pudo cargar el sonido: {no}")
+        sonido_rebote = None    
 
     # ---- Crear entidades mutables ---- #
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
@@ -75,7 +93,13 @@ def ejecutar_juego(pantalla, reloj):
         # blitteo/dibujado
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
-
+        
+        #puntaje
+        texto_score = fuente_hud.render(f"PUNTAJE: {puntaje}", True, (255, 255, 255))
+        x_score = pantalla.get_width() - 200 
+        y_score = pantalla.get_height() - 220
+        pantalla.blit(texto_score, (x_score, y_score))
+        
         pygame.display.flip()
 
     return ESTADO_SALIR
@@ -92,6 +116,7 @@ def main()->None:
     while corriendo:
         
         if estado_actual == ESTADO_MENU:
+            
             pygame.event.clear()
             # Llamamos a la función que ejecuta el menú
             # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
@@ -102,6 +127,7 @@ def main()->None:
                 corriendo = False
                 
         elif estado_actual == ESTADO_JUGAR:
+            pygame.mixer.music.stop()
             pygame.event.clear()
             # Llamamos a la función que ejecuta la partida
             estado_actual = ejecutar_juego(ventana_principal, RELOJ)
@@ -110,6 +136,11 @@ def main()->None:
             pygame.event.clear()
             # llamamos a la funcion de los trofeos
             estado_actual = ejecutar_ranking(ventana_principal, RELOJ)
+            
+        
+        elif estado_actual == ESTADO_OPCIONES:
+            pygame.event.clear()
+            estado_actual = ejecutar_opciones(ventana_principal, RELOJ)
             
             # Si el juego nos dice que salgamos, detenemos el bucle principal
             if estado_actual == ESTADO_SALIR:
