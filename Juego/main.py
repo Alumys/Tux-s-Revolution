@@ -1,14 +1,30 @@
 import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de archivos
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
+<<<<<<< HEAD
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+from modules.ventana import ANCHO_PANTALLA_P as ANCHO
+from modules.ventana import LARGO_PANTALLA_P as LARGO
+from modules.ventana import ICONO
 
+pygame.init()
+
+ventana_principal = pygame.display.set_mode((ANCHO, LARGO))
+pygame.display.set_caption("Tux's REVOLUTION")
+=======
+=======
+=======
+>>>>>>> c13b1fd4619a3005a76c3959977d35c4aa4a011f
+# VENTANA #
+>>>>>>> 967acc5bfaa73e06b59e924ec7bd662c81571a5d
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
-from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
+from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuales de la pantalla 
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_RANKING, ESTADO_OPCIONES # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR # Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
 # ENTIDADES #
 from modules.entidades.entidades import dibujar_entidad # graficador de entidades
@@ -20,52 +36,41 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
-# agregando la importancion para el ranking
-from modules.pantalla_ranking import ejecutar_ranking
-#pantalla del puntaje
-from modules.fin_juego import ejecutar_pantalla_fin
+#######################
+# Ladrillos:
+#from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
+##
+from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
+from modules.entidades.tiradas_objetos import crear_drop, actualizar_drop, dibujar_drop, drop_colisiona_paleta, aplicar_power_up
 
-# sonido
-from modules.opciones import ejecutar_opciones
-
+#
 pygame.init()
+pygame.font.init()
 
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
-
+>>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
 pygame.display.set_icon(ICONO)
-
-#sonidos
-pygame.mixer.music.load("assets/sounds/menu.wav") 
-pygame.mixer.music.set_volume(0.5) # Volumen inicial (50%)
-pygame.mixer.music.play(-1) # El -1 hace que se repita infinitamente (loop)
 
 def ejecutar_juego(pantalla, reloj):
     """
     Bucle principal del estado JUGAR.
     Maneja paleta, pelota, movimiento y colisiones.
     """
-    
-    puntaje = 100
-    fuente_hud = pygame.font.Font(None, 36) # Fuente para el texto
-    
-    try:
-        sonido_rebote = pygame.mixer.Sound("assets/sounds/golpe_pelota.wav")
-        sonido_rebote.set_volume(0.8)
-    except Exception as no:
-        print(f"no se pudo cargar el sonido: {no}")
-        sonido_rebote = None    
 
     # ---- Crear entidades mutables ---- #
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
+    ladrillos = crear_ladrillos(ANCHO)
+    drops = [] # Soltados de objetos lista 
     # @~LAU-NOTA:~
     # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
     # es posible moverlo, pero modularizarlo no... es complejo de momento
-    puntaje_actual = 6000
+    # --- LADRILLOS ---
+    
     jugando = True
     while jugando:
         reloj.tick(FPS)
-        pantalla.fill((30, 80, 90))
+        pantalla.blit(FONDO_JUEGO, (0, 0))
 
         # ---- Eventos ----
         for evento in pygame.event.get():
@@ -75,31 +80,29 @@ def ejecutar_juego(pantalla, reloj):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_ESCAPE:
                     return ESTADO_MENU
-                
-                if evento.key == pygame.K_g:
-                    print("TRUCO ACTIVADO! GANASTE")
-                    nuevo_estado = ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, True)
-                    return nuevo_estado
-                
-                if evento.key == pygame.K_p:
-                    print("TRUCO ACTIVADO! PERDISTE")
-                    nuevo_estado = ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False)
-                    return nuevo_estado
 
-        # MOVIMIENTOS ENTIDADES
-        movimiento_paleta(paleta_rect) # @~LAU~ nota-PALETA: luego colocar un condicional para el RED HAT
-        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) # @~LAU~ nota-PELOTA: luego colocar un condicional para wine
+        # 1) movimiento de entidades
+        movimiento_paleta(paleta_rect)
+        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
 
-        # blitteo/dibujado
+        # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos)
+        vel_y = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
+
+        # 3) actualizar y dibujar drops (IMPORTANTE: iterar sobre copia)
+        for drop in drops:
+            actualizar_drop(drop, ALTO)
+            dibujar_drop(pantalla, drop)
+
+            if drop_colisiona_paleta(drop, paleta_rect):
+                aplicar_power_up(drop, paleta_rect, pelota_rect)  # fut1uro
+                drops.remove(drop)
+
+
+        # 4) dibujado entidades y ladrillos
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
-        
-        #puntaje
-        texto_score = fuente_hud.render(f"PUNTAJE: {puntaje}", True, (255, 255, 255))
-        x_score = pantalla.get_width() - 200 
-        y_score = pantalla.get_height() - 220
-        pantalla.blit(texto_score, (x_score, y_score))
-        
+        dibujar_ladrillos(pantalla, ladrillos)
+
         pygame.display.flip()
 
     return ESTADO_SALIR
@@ -111,13 +114,10 @@ def main()->None:
     """
     # La variable que controla en qué parte del juego estamos
     estado_actual = ESTADO_MENU 
-    
+
     corriendo = True # Esta es tu bandera original del bucle principal
     while corriendo:
-        
         if estado_actual == ESTADO_MENU:
-            
-            pygame.event.clear()
             # Llamamos a la función que ejecuta el menú
             # Esta función PAUSA el bucle principal hasta que el menú devuelve un estado
             estado_actual = ejecutar_menu(ventana_principal, RELOJ)
@@ -127,20 +127,8 @@ def main()->None:
                 corriendo = False
                 
         elif estado_actual == ESTADO_JUGAR:
-            pygame.mixer.music.stop()
-            pygame.event.clear()
             # Llamamos a la función que ejecuta la partida
             estado_actual = ejecutar_juego(ventana_principal, RELOJ)
-            
-        elif estado_actual == ESTADO_RANKING:
-            pygame.event.clear()
-            # llamamos a la funcion de los trofeos
-            estado_actual = ejecutar_ranking(ventana_principal, RELOJ)
-            
-        
-        elif estado_actual == ESTADO_OPCIONES:
-            pygame.event.clear()
-            estado_actual = ejecutar_opciones(ventana_principal, RELOJ)
             
             # Si el juego nos dice que salgamos, detenemos el bucle principal
             if estado_actual == ESTADO_SALIR:
