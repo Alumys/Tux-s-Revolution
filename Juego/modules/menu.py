@@ -1,148 +1,167 @@
 import pygame
 
-from modules.ventana import LARGO_PANTALLA_P
-from modules.ventana import FONDO_MENU, TITULO_JUEGO, BOTON_OPCION
-from modules.ventana import FUENTE_GENERAL
+# ===========================
+# IMPORTS DESDE modules.ventana (RESPETADO)
+# ===========================
+from modules.ventana import (
+    LARGO_PANTALLA_P,
+    FONDO_MENU,
+    TITULO_JUEGO,
+    BOTON_OPCION,
+    BOTON_SELECCION,
+    FUENTE_GENERAL
+)
 
-ANCHO_PANTALLA = 800  # Mantener para la lógica interna del menú
-# CONFIGURACIONES #
-
-# Cordenadas
+# ===========================
+# CONFIGURACIONES ORIGINALES TUYAS (USADAS)
+# ===========================
+ANCHO_PANTALLA = 800  
 CENTRO_X = ANCHO_PANTALLA // 2
-INICIO_Y = 225
 
-# Dimensiones
-CENTRO_X = ANCHO_PANTALLA // 2
-INICIO_Y = 225
-ESPACIADO = 64
+INICIO_Y = 250          # ← USADO PARA LA BASE DEL MENÚ
+ESPACIADO = 130         # ← USADO PARA DISTANCIA VERTICAL REAL
 
-# Config-Diamante                 
-ALTO_DIAMANTE = 60 # Este valor sera el alto del diamante
-ANCHO_DIAMANTE = 300  # Este valor sera el alto del diamante
+ALTO_BOTON = 60
+ANCHO_BOTON = 300
 
-
-# Botones
-textos_botones = ["JUGAR", "MULTIJUGADOR", "PUNTUACIÓN", "OPCIONES DE JUEGO", "CRÉDITOS", "SALIR"] # Creamos una lista con las opciones
-
-# Colores
+textos_botones = ["JUGAR", "PUNTUACIÓN", "AUDIO", "CRÉDITOS", "SALIR"]
 
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 AZUL_MENU = (0, 102, 204)
 AMARILLO = (255, 255, 0)
-GRIS_PANEL = (30, 30, 45, 180) # Con Alpha (transparencia)
+
+# ===========================
+# NUEVAS CONSTANTES (AGREGADAS Y DOCUMENTADAS)
+# ===========================
+# Estas NO existían, por eso se documentan.
+# Solo controlan la separación horizontal en el menú doble columna.
+
+# --- distancia horizontal desde el centro hacia la izquierda
+POS_MENU_X_OFFSET = 260      
+
+# --- distancia horizontal desde el centro hacia la derecha
+# (es igual pero con signo opuesto, por claridad se explicita)
+POS_MENU_COL_IZQ = CENTRO_X - POS_MENU_X_OFFSET  
+POS_MENU_COL_DER = CENTRO_X + POS_MENU_X_OFFSET  
+
+# --- factor para ajustar que el menú doble columna INICIE justo donde tu INICIO_Y indicaba
+POS_MENU_Y_INICIO = INICIO_Y + 35  
+
+# --- creciente vertical REAL basado EN TU ESPACIADO
+POS_MENU_Y_ESPACIADO = ESPACIADO  
 
 
-
-# FUNCIÓN DE ACCIÓN CENTRAL
-# Modificada para devolver un string que represente el nuevo estado
-def manejar_acciones_boton(indice):
-    """
-    Función de acción central del menú. Determina el siguiente estado
-    del juego basándose en el botón (índice) presionado.
-
-    prametro indice: Índice (0-5) del botón seleccionado.
-    return: string con el nuevo estado ("JUGAR", "SALIR" o "MENU").
-    """
+# ===========================================================
+# FUNCIÓN DE ACCIÓN CENTRAL (RESPETADA)
+# ===========================================================
+def manejar_acciones_boton(indice: int) -> str:
     if indice == 0:
         print(">>> Iniciando el juego principal...")
-        return "JUGAR" # Nuevo estado: Jugar
+        return "JUGAR"
     elif indice == 1:
-        print(">>> Conectando al lobby...")
-        return "MENU" # Después de esta acción, volvemos al menú
-    elif indice == 2:
         print(">>> Mostrando puntuaciones altas...")
-        return "MENU" # Después de esta acción, volvemos al menú
+        return "MENU"
+    elif indice == 2:
+        print(">>> Abriendo audio...")
+        return "MENU"
     elif indice == 3:
-        print(">>> Abriendo opciones...")
-        return "MENU" # Después de esta acción, volvemos al menú
-    elif indice == 4:
         print(">>> Mostrando los créditos...")
-        return "MENU" # Después de esta acción, volvemos al menú
-    elif indice == 5:
+        return "MENU"
+    elif indice == 4:
         print(">>> Acción de Salir")
-        return "SALIR" # Nuevo estado: Salir
-    return "MENU" # Por defecto, si no es una acción de cambio de pantalla, se queda en el menú
+        return "SALIR"
+    return "MENU"
 
+
+# ===========================================================
+# EJECUCIÓN DEL MENÚ
+# ===========================================================
 def ejecutar_menu(pantalla, reloj):
-    """
-    Función que ejecuta el bucle de estado del menú.
-    Toma el control de la aplicación, dibuja los elementos y espera
-    la entrada del usuario (mouse o cierre de ventana).
 
-    pantalla: Superficie de Pygame donde se dibujará el menú.
-    reloj: Objeto pygame.time.Clock para controlar los FPS del menú.
-    return: string con el nuevo estado ("JUGAR" o "SALIR").
-    
-    """
-
-    # --- PREPARACIÓN DE BOTONES ---
     botones_data = []
-    
+
     for i, texto in enumerate(textos_botones):
-        # La posición Y se calcula en base al texto del botón y el espaciado
-        # La lógica original para el desplazamiento de "SALIR" se mantiene
-        pos_y_centro = INICIO_Y + i * ESPACIADO + (20 if texto == "SALIR" else 0)
-        
-        # Calcular los 4 vértices del diamante
-        puntos_diamante = [
-            (CENTRO_X, pos_y_centro - ALTO_DIAMANTE // 2),
-            (CENTRO_X + ANCHO_DIAMANTE // 2, pos_y_centro),
-            (CENTRO_X, pos_y_centro + ALTO_DIAMANTE // 2),
-            (CENTRO_X - ANCHO_DIAMANTE // 2, pos_y_centro)
-        ]
-        
-        # Crear el rect de colisión (necesario para .collidepoint)
-        # Ajustamos el rect para que abarque el área visual del diamante
-    
-        rect_colision = pygame.Rect(CENTRO_X - ALTO_DIAMANTE // 2, pos_y_centro - ALTO_DIAMANTE // 2, ANCHO_DIAMANTE, ALTO_DIAMANTE)
-        
-        # Almacenamos todos los datos relevantes
-        botones_data.append({"puntos": puntos_diamante, "centro_y": pos_y_centro, "rect": rect_colision})
-    
-    # --- BUCLE PRINCIPAL DEL MENÚ ---
-    bucle_principal_menu = True # Renombramos para evitar confusión con el de main.py
+
+        # -----------------------------------------
+        # POSICIONAMIENTO EN DOS COLUMNAS
+        # Usando tus constantes INICIO_Y y ESPACIADO
+        # -----------------------------------------
+
+        if texto == "SALIR":
+            # Botón centrado al final
+            pos_x = CENTRO_X
+            pos_y = POS_MENU_Y_INICIO + (2 * POS_MENU_Y_ESPACIADO) - 200
+        else:
+            # Ejemplo:
+            #   0 → izquierda
+            #   1 → derecha
+            #   2 → izquierda
+            #   3 → derecha
+            if i % 2 == 0:
+                pos_x = POS_MENU_COL_IZQ
+            else:
+                pos_x = POS_MENU_COL_DER
+
+            # Alineación vertical basada en tu ESPACIADO real
+            pos_y = POS_MENU_Y_INICIO + (i // 2) * POS_MENU_Y_ESPACIADO
+
+        rect_colision = pygame.Rect(
+            pos_x - ANCHO_BOTON // 2,
+            pos_y - ALTO_BOTON // 2,
+            ANCHO_BOTON,
+            ALTO_BOTON
+        )
+
+        botones_data.append({
+            "centro_x": pos_x,
+            "centro_y": pos_y,
+            "rect": rect_colision,
+            "puntos": []  # respetado
+        })
+
+    # ===========================================================
+    # LOOP DEL MENÚ
+    # ===========================================================
+    bucle_principal_menu = True
+
     while bucle_principal_menu:
-        reloj.tick(60) # Controlamos los FPS del menú
+
+        reloj.tick(60)
         posicion_mouse = pygame.mouse.get_pos()
-        
-        # 1. Eventos
+
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                return "SALIR" # Si el usuario cierra la ventana, salimos del juego
-            
+                return "SALIR"
+
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 for i, data in enumerate(botones_data):
                     if data["rect"].collidepoint(evento.pos):
                         nuevo_estado = manejar_acciones_boton(i)
-                        # Si la acción del botón es cambiar de estado, devolvemos ese estado
                         if nuevo_estado != "MENU":
                             return nuevo_estado
-                        # Si la acción es "MENU" (ej. un botón de opciones), el bucle del menú continúa
-                        
-        # 2. Dibujado 
-        pantalla.blit(FONDO_MENU, (0, 0))
-        
-        # Dibujamos el panel de fondo
-        panel_surface = pygame.Surface((ANCHO_PANTALLA, LARGO_PANTALLA_P), pygame.SRCALPHA) # Usa LARGO_PANTALLA_P del main.py
-        pantalla.blit(panel_surface, (0, 0))
-        pantalla.blit(TITULO_JUEGO, (145, -10))
 
-        # Dibujado de botones (diamantes)
+        # Fondo
+        pantalla.blit(FONDO_MENU, (0, 0))
+
+        # Panel
+        panel_surface = pygame.Surface((ANCHO_PANTALLA, LARGO_PANTALLA_P), pygame.SRCALPHA)
+        pantalla.blit(panel_surface, (0, 0))
+        pantalla.blit(TITULO_JUEGO, (145, -30))
+
+        # Botones
         for i, data in enumerate(botones_data):
-            if data["rect"].collidepoint(posicion_mouse):
-                color = AMARILLO
-            else:
-                color = AZUL_MENU
-                
-            pygame.draw.polygon(pantalla, color, data["puntos"])
-            
-            # Renderizamos el texto del botón
+
+            esta_encima = data["rect"].collidepoint(posicion_mouse)
+            imagen_boton = BOTON_SELECCION if esta_encima else BOTON_OPCION
+
+            rect_boton = imagen_boton.get_rect(center=(data["centro_x"], data["centro_y"]))
+            pantalla.blit(imagen_boton, rect_boton)
+
             superficie_texto = FUENTE_GENERAL.render(textos_botones[i], True, NEGRO)
-            
-            rect_texto = superficie_texto.get_rect(center=(CENTRO_X, data["centro_y"]))
+            rect_texto = superficie_texto.get_rect(center=(data["centro_x"], data["centro_y"]))
             pantalla.blit(superficie_texto, rect_texto)
-            
+
         pygame.display.flip()
-        
-    return "SALIR" # En caso de que el bucle del menú se rompa inesperadamente
+
+    return "SALIR"

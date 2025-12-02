@@ -18,9 +18,9 @@ ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P)
 NOMBRE_JUEGO = "TUX'S REVOLUTION" 
 ICONO = pygame.image.load('assets/images/iconos/icono_revolucion.png') 
 
-# PANTALLA DE TITULO
+# LOGO DEL TITULO
 TITULO_JUEGO = pygame.image.load('assets/images/titulos/titulo_juego.png').convert_alpha()
-TITULO_JUEGO = pygame.transform.scale(TITULO_JUEGO, (500, 220))
+TITULO_JUEGO = pygame.transform.scale(TITULO_JUEGO, (550, 250))
 
 # IMAGEN DE FONDO JUEGO
 FONDO_JUEGO = pygame.image.load('assets/images/fondos/fondo_juego.png').convert()
@@ -30,7 +30,7 @@ FONDO_JUEGO = pygame.transform.scale(FONDO_JUEGO, (800, 600))
 FONDO_MENU = pygame.image.load('assets/images/fondos/fondo_menu.png').convert()
 FONDO_MENU = pygame.transform.scale(FONDO_JUEGO, (800, 600))
 
-# OPCIONES
+# OPCIONES del menu principal
 BOTON_OPCION = pygame.image.load('assets/images/opciones/cuadro_opcion.png').convert_alpha()
 BOTON_OPCION = pygame.transform.scale(BOTON_OPCION, (300, 200))
 BOTON_SELECCION = pygame.image.load('assets/images/opciones/cuadro_seleccion.png').convert_alpha()
