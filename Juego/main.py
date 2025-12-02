@@ -20,7 +20,11 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
+#######################
+# Ladrillos:
+from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
 
+#
 pygame.init()
 
 # Configs. Ventana principal: (visual y nombre)
@@ -38,6 +42,10 @@ def ejecutar_juego(pantalla, reloj):
     # @~LAU-NOTA:~
     # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
     # es posible moverlo, pero modularizarlo no... es complejo de momento
+    # --- LADRILLOS ---
+    ladrillos = crear_ladrillos(ANCHO)
+    
+    drops = [] # Soltados de objetos lista 
 
     jugando = True
     while jugando:
@@ -56,10 +64,14 @@ def ejecutar_juego(pantalla, reloj):
         # MOVIMIENTOS ENTIDADES
         movimiento_paleta(paleta_rect) # @~LAU~ nota-PALETA: luego colocar un condicional para el RED HAT
         vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) # @~LAU~ nota-PELOTA: luego colocar un condicional para wine
+        
+        vel_y = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos)
 
         # blitteo/dibujado
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
+        
+        dibujar_ladrillos(pantalla, ladrillos)
 
         pygame.display.flip()
 
