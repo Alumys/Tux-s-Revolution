@@ -20,16 +20,18 @@ POS_Y_PALETA = LARGO_PANTALLA_P - 100
 ancho_paleta = 120
 alto_paleta = 20
 
+ancho_imagen = 120
+
 # Funcion crear paleta 
 def crear_paleta(x, y, ancho, alto, color=(255, 255, 255)):
-    ruta_imagen = "assets/images/pj_jugables/prueba_personaje.png"
+    ruta_imagen = "assets/images/pj_jugables/paleta_tux.png"
     paleta_rect = pygame.Rect(x, y, ancho, alto)  # Rect para colisiones
-    alto_pj = 100  # Alto visual de la imagen
-
+    alto_pj = 120  # Alto visual de la imagen
+    ancho_pj = 150
     # Visual/Frontend
     if os.path.exists(ruta_imagen):
         imagen = pygame.image.load(ruta_imagen).convert_alpha()
-        imagen = pygame.transform.scale(imagen, (ancho, alto_pj))  # Escalado
+        imagen = pygame.transform.scale(imagen, (ancho_pj, alto_pj))  # Escalado
     else:
         imagen = pygame.Surface((ancho, alto))
         imagen.fill(color)
