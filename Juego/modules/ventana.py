@@ -31,8 +31,10 @@ FONDO_MENU = pygame.image.load('assets/images/fondos/fondo_menu.png').convert()
 FONDO_MENU = pygame.transform.scale(FONDO_JUEGO, (800, 600))
 
 # OPCIONES
-BOTON_OPCION = pygame.image.load('assets/images/fondos/fondo_menu.png').convert_alpha()
+BOTON_OPCION = pygame.image.load('assets/images/opciones/cuadro_opcion.png').convert_alpha()
 BOTON_OPCION = pygame.transform.scale(BOTON_OPCION, (300, 200))
- 
+BOTON_SELECCION = pygame.image.load('assets/images/opciones/cuadro_seleccion.png').convert_alpha()
+BOTON_SELECCION = pygame.transform.scale(BOTON_SELECCION, (300, 200))
+
 # FUENTE
 FUENTE_GENERAL = pygame.font.Font("assets/fonts/CARTNIST.TTF", 32)

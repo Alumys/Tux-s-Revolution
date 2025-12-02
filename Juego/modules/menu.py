@@ -139,6 +139,7 @@ def ejecutar_menu(pantalla, reloj):
             
             # Renderizamos el texto del botón
             superficie_texto = FUENTE_GENERAL.render(textos_botones[i], True, NEGRO)
+            
             rect_texto = superficie_texto.get_rect(center=(CENTRO_X, data["centro_y"]))
             pantalla.blit(superficie_texto, rect_texto)
             
