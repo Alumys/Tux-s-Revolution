@@ -4,7 +4,7 @@ from modules.ventana import LARGO_PANTALLA_P
 from modules.dependencias_menu.m_constantes import ANCHO_PANTALLA, CENTRO_X, INICIO_Y, ESPACIADO, ALTO_DIAMANTE, ANCHO_DIAMANTE
 from modules.dependencias_menu.m_colores import NEGRO, BLANCO, AZUL_MENU, AMARILLO, GRIS_PANEL
 from modules.dependencias_menu.m_variables import textos_botones
-
+from modules.ventana import FONDO_MENU, TITULO_JUEGO, BOTON_OPCION
 # FUNCIÓN DE ACCIÓN CENTRAL
 # Modificada para devolver un string que represente el nuevo estado
 def manejar_acciones_boton(indice):
@@ -100,13 +100,13 @@ def ejecutar_menu(pantalla, reloj):
                         # Si la acción es "MENU" (ej. un botón de opciones), el bucle del menú continúa
                         
         # 2. Dibujado 
-        pantalla.fill(BLANCO) # Fondo blanco
+        pantalla.blit(FONDO_MENU, (0, 0))
         
         # Dibujamos el panel de fondo
         panel_surface = pygame.Surface((ANCHO_PANTALLA, LARGO_PANTALLA_P), pygame.SRCALPHA) # Usa LARGO_PANTALLA_P del main.py
-        pygame.draw.rect(panel_surface, GRIS_PANEL, panel_surface.get_rect(), border_radius=50)
         pantalla.blit(panel_surface, (0, 0))
-        pantalla.blit(texto_titulo, rect_titulo)
+        pantalla.blit(TITULO_JUEGO, (145, -10))
+        #pantalla.blit(texto_titulo, rect_titulo)
 
         # Dibujado de botones (diamantes)
         for i, data in enumerate(botones_data):

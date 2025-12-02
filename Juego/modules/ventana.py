@@ -1,5 +1,6 @@
 import pygame
 
+
 # --- Definición de Estados del Juego --- #
 ESTADO_MENU = "MENU"
 ESTADO_JUGAR = "JUGAR"
@@ -9,13 +10,26 @@ ESTADO_SALIR = "SALIR"
 ANCHO_PANTALLA_P = 800
 LARGO_PANTALLA_P = 600
 
+# CREACION DE VARIABLES PARA SU USO #
+ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P))
+
 # ICONO Y NOMBRE DEL PROYECTO #
 NOMBRE_JUEGO = "TUX'S REVOLUTION" 
 ICONO = pygame.image.load('assets/images/iconos/icono_revolucion.png') 
 
-# CREACION DE VARIABLES PARA SU USO #
-ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P))
+# PANTALLA DE TITULO
+TITULO_JUEGO = pygame.image.load('assets/images/titulos/titulo_juego.png').convert_alpha()
+TITULO_JUEGO = pygame.transform.scale(TITULO_JUEGO, (500, 220))
 
-# IMAGEN DE FONDO 
+# IMAGEN DE FONDO JUEGO
 FONDO_JUEGO = pygame.image.load('assets/images/fondos/fondo_juego.png').convert()
 FONDO_JUEGO = pygame.transform.scale(FONDO_JUEGO, (800, 600))
+
+# IMAGEN DE FONDO MENU
+FONDO_MENU = pygame.image.load('assets/images/fondos/fondo_menu.png').convert()
+FONDO_MENU = pygame.transform.scale(FONDO_JUEGO, (800, 600))
+
+# OPCIONES
+BOTON_OPCION = pygame.image.load('assets/images/fondos/fondo_menu.png').convert_alpha()
+BOTON_OPCION = pygame.transform.scale(BOTON_OPCION, (300, 200))
+ 
