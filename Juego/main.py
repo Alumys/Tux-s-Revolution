@@ -1,10 +1,9 @@
 import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de archivos
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
-
 # VENTANA #
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
-from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE # Visuales de la pantalla 
+from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuales de la pantalla 
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
@@ -20,8 +19,16 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
+#######################
+# Ladrillos:
+#from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
+##
+from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
+from modules.entidades.tiradas_objetos import crear_drop, actualizar_drop, dibujar_drop, drop_colisiona_paleta, aplicar_power_up
 
+#
 pygame.init()
+pygame.font.init()
 
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
@@ -35,14 +42,17 @@ def ejecutar_juego(pantalla, reloj):
 
     # ---- Crear entidades mutables ---- #
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
+    ladrillos = crear_ladrillos(ANCHO)
+    drops = [] # Soltados de objetos lista 
     # @~LAU-NOTA:~
     # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
     # es posible moverlo, pero modularizarlo no... es complejo de momento
-
+    # --- LADRILLOS ---
+    
     jugando = True
     while jugando:
         reloj.tick(FPS)
-        pantalla.fill((30, 80, 90))
+        pantalla.blit(FONDO_JUEGO, (0, 0))
 
         # ---- Eventos ----
         for evento in pygame.event.get():
@@ -53,13 +63,27 @@ def ejecutar_juego(pantalla, reloj):
                 if evento.key == pygame.K_ESCAPE:
                     return ESTADO_MENU
 
-        # MOVIMIENTOS ENTIDADES
-        movimiento_paleta(paleta_rect) # @~LAU~ nota-PALETA: luego colocar un condicional para el RED HAT
-        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO) # @~LAU~ nota-PELOTA: luego colocar un condicional para wine
+        # 1) movimiento de entidades
+        movimiento_paleta(paleta_rect)
+        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
 
-        # blitteo/dibujado
+        # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos)
+        vel_y = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
+
+        # 3) actualizar y dibujar drops (IMPORTANTE: iterar sobre copia)
+        for drop in drops:
+            actualizar_drop(drop, ALTO)
+            dibujar_drop(pantalla, drop)
+
+            if drop_colisiona_paleta(drop, paleta_rect):
+                aplicar_power_up(drop, paleta_rect, pelota_rect)  # fut1uro
+                drops.remove(drop)
+
+
+        # 4) dibujado entidades y ladrillos
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
+        dibujar_ladrillos(pantalla, ladrillos)
 
         pygame.display.flip()
 
@@ -72,7 +96,7 @@ def main()->None:
     """
     # La variable que controla en qué parte del juego estamos
     estado_actual = ESTADO_MENU 
-    
+
     corriendo = True # Esta es tu bandera original del bucle principal
     while corriendo:
         if estado_actual == ESTADO_MENU:

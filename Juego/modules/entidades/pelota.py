@@ -11,17 +11,17 @@ colores = ()
 
 # posicionamiento
 POS_X_PELOTA = 350 
-POS_Y_PELOTA = LARGO_PANTALLA_P - 140
+POS_Y_PELOTA = LARGO_PANTALLA_P - 160
 
 # dimensiones 
-tamano_pelota = 40  
+tamano_pelota = 50  
 # @~Lau nota:~
 # Configuracion Wine/Vino:
 # Luego colocar el codigo despues, ya sea rama_araceli/rama_lauta
 
 # Funcion crear pelota 
 def crear_pelota(x, y, tamano, color=(255, 255, 255), velocidad_x=velocidades_xx, velocidad_y=-velocidades_yy):
-    ruta_imagen = "assets/images/pelotas/prueba_pelota.png"
+    ruta_imagen = "assets/images/pelotas/terminal.png"
     pelota_rect = pygame.Rect(x, y, tamano, tamano)  # Rect colisiones
 
     # Visual/Frontend
