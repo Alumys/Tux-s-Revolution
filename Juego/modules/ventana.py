@@ -1,11 +1,14 @@
 import pygame
 
+
 pygame.font.init()
 
 # --- Definición de Estados del Juego --- #
 ESTADO_MENU = "MENU"
 ESTADO_JUGAR = "JUGAR"
 ESTADO_SALIR = "SALIR"
+ESTADO_PUNTOS = "PUNTOS"
+ESTADO_AUDIO = "AUDIO"
 
 # DIMENSIONES PROGRAMA ABIERTO #
 ANCHO_PANTALLA_P = 800
@@ -13,6 +16,7 @@ LARGO_PANTALLA_P = 600
 
 # CREACION DE VARIABLES PARA SU USO #
 ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P))
+
 
 # ICONO Y NOMBRE DEL PROYECTO #
 NOMBRE_JUEGO = "TUX'S REVOLUTION" 
@@ -38,3 +42,4 @@ BOTON_SELECCION = pygame.transform.scale(BOTON_SELECCION, (300, 200))
 
 # FUENTE
 FUENTE_GENERAL = pygame.font.Font("assets/fonts/CARTNIST.TTF", 32)
+

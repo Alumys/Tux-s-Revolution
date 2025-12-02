@@ -153,6 +153,8 @@ def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops):
     - Si es especial → crear drop
     Retorna: nueva vel_y
     """
+    
+    puntos_ganados = 0
 
     for ladrillo in ladrillos:
         if pelota_rect.colliderect(ladrillo["rect"]):
@@ -170,11 +172,12 @@ def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops):
 
                 # Eliminar ladrillo
                 ladrillos.remove(ladrillo)
+                puntos_ganados = 100
 
             # Siempre rebota
-            return -vel_y
+            return -vel_y, puntos_ganados
 
-    return vel_y
+    return vel_y, 0
 
 
 # ============================================================
