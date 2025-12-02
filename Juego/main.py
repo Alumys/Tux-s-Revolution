@@ -1,24 +1,7 @@
 import os # Importacion de SISTEMA OPERATIVO. Comprobacion de la existencia de archivos
 import sys # No es tan necesario pero es una recomendacion para una mejor optimizacion del programa
 import pygame # Importacion de la Biblioteca pygame
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-from modules.ventana import ANCHO_PANTALLA_P as ANCHO
-from modules.ventana import LARGO_PANTALLA_P as LARGO
-from modules.ventana import ICONO
-
-pygame.init()
-
-ventana_principal = pygame.display.set_mode((ANCHO, LARGO))
-pygame.display.set_caption("Tux's REVOLUTION")
-=======
-=======
-=======
->>>>>>> c13b1fd4619a3005a76c3959977d35c4aa4a011f
-# VENTANA #
->>>>>>> 967acc5bfaa73e06b59e924ec7bd662c81571a5d
 from modules.ventana import ventana_principal # "Lienzo"/Pantalla principal
 from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuales de la pantalla 
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
@@ -49,7 +32,7 @@ pygame.font.init()
 
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
->>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
+
 pygame.display.set_icon(ICONO)
 
 def ejecutar_juego(pantalla, reloj):
