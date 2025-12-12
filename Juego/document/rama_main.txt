@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 Documentacion de Lauta/root
+=======
+<<<<<<< HEAD
+Documentacion de la rama principal (Criolla)
+=======
+Documentacion de Lauta/root
+>>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
+>>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
 
 # Primeros cambios del dia 13/11/2025 
 
@@ -8,6 +16,13 @@ Documentacion de Lauta/root
 
 ~ Todos los cambios fueron hechos por la rama_lauta. ~
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
 # Estructura organizativa e inclusion del menu 20/11/2025
     |
     +-| Estructura organizativa:
@@ -31,4 +46,9 @@ Documentacion de Lauta/root
     |       con el fin de terminar con la subida de archivos inecesarios.
 
     ~ Todos los trabajos recopilados a la rama main fueron hechos por rama_araceli y rama_timo~
+<<<<<<< HEAD
     ~ Todos los cambios fueron hechos por Lauta/root ~
+=======
+    ~ Todos los cambios fueron hechos por Lauta/root ~
+>>>>>>> e21bef0f639c007e0e4608b4b08bca0a0a6a143f
+>>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
