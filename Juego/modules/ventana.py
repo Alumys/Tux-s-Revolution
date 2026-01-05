@@ -1,20 +1,14 @@
 import pygame
 
-<<<<<<< HEAD
-=======
 
->>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
 pygame.font.init()
 
 # --- Definición de Estados del Juego --- #
 ESTADO_MENU = "MENU"
 ESTADO_JUGAR = "JUGAR"
 ESTADO_SALIR = "SALIR"
-<<<<<<< HEAD
-=======
 ESTADO_PUNTOS = "PUNTOS"
 ESTADO_AUDIO = "AUDIO"
->>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
 
 # DIMENSIONES PROGRAMA ABIERTO #
 ANCHO_PANTALLA_P = 800
@@ -23,10 +17,7 @@ LARGO_PANTALLA_P = 600
 # CREACION DE VARIABLES PARA SU USO #
 ventana_principal = pygame.display.set_mode((ANCHO_PANTALLA_P, LARGO_PANTALLA_P))
 
-<<<<<<< HEAD
-=======
 
->>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
 # ICONO Y NOMBRE DEL PROYECTO #
 NOMBRE_JUEGO = "TUX'S REVOLUTION" 
 ICONO = pygame.image.load('assets/images/iconos/icono_revolucion.png') 
@@ -51,7 +42,4 @@ BOTON_SELECCION = pygame.transform.scale(BOTON_SELECCION, (300, 200))
 
 # FUENTE
 FUENTE_GENERAL = pygame.font.Font("assets/fonts/CARTNIST.TTF", 32)
-<<<<<<< HEAD
-=======
 
->>>>>>> f8ceec0a402c90fe312bcab8c5e16cdebff07efc
