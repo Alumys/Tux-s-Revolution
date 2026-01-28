@@ -1,5 +1,5 @@
 import pygame
-
+from modules.ventana import ESTADO_CREDITOS
 # ===========================
 # IMPORTS DESDE modules.ventana (RESPETADO)
 # ===========================
@@ -10,6 +10,14 @@ from modules.ventana import (
     BOTON_OPCION,
     BOTON_SELECCION,
     FUENTE_GENERAL
+)
+from modules.ventana import (
+    ESTADO_MENU,
+    ESTADO_JUGAR,
+    ESTADO_PUNTOS,
+    ESTADO_AUDIO,
+    ESTADO_CREDITOS,
+    ESTADO_SALIR
 )
 
 # ===========================
@@ -55,23 +63,20 @@ POS_MENU_Y_ESPACIADO = ESPACIADO
 # ===========================================================
 # FUNCIÓN DE ACCIÓN CENTRAL (RESPETADA)
 # ===========================================================
-def manejar_acciones_boton(indice: int) -> str:
+def manejar_acciones_boton(indice: int):
     if indice == 0:
-        print(">>> Iniciando el juego principal...")
-        return "JUGAR"
+        return ESTADO_JUGAR
     elif indice == 1:
-        print(">>> Mostrando puntuaciones altas...")
-        return "PUNTOS"
+        return ESTADO_PUNTOS
     elif indice == 2:
-        print(">>> Abriendo audio...")
-        return "AUDIO"
+        return ESTADO_AUDIO
     elif indice == 3:
-        print(">>> Mostrando los créditos...")
-        return "MENU"
+        print(">>> CLICK EN CREDITOS")
+        return ESTADO_CREDITOS
     elif indice == 4:
-        print(">>> Acción de Salir")
-        return "SALIR"
-    return "MENU"
+        return ESTADO_SALIR
+    return ESTADO_MENU
+
 
 
 # ===========================================================
@@ -79,6 +84,9 @@ def manejar_acciones_boton(indice: int) -> str:
 # ===========================================================
 def ejecutar_menu(pantalla, reloj):
 
+    pygame.mixer.music.load("C:/juego/Tux-s-Revolution/Juego/assets/sounds/menu.wav")
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(-1)
     botones_data = []
 
     for i, texto in enumerate(textos_botones):
@@ -139,7 +147,11 @@ def ejecutar_menu(pantalla, reloj):
                     if data["rect"].collidepoint(evento.pos):
                         nuevo_estado = manejar_acciones_boton(i)
                         if nuevo_estado != "MENU":
-                            return nuevo_estado
+                            pygame.mixer.music.stop()
+                            bucle_principal_menu = False  # corta el loop
+                            return nuevo_estado           # devuelve estado para main
+
+
 
         # Fondo
         pantalla.blit(FONDO_MENU, (0, 0))

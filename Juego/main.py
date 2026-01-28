@@ -7,7 +7,7 @@ from modules.ventana import ICONO, NOMBRE_JUEGO as NOMBRE, FONDO_JUEGO # Visuale
 from modules.ventana import ANCHO_PANTALLA_P as ANCHO, LARGO_PANTALLA_P as ALTO # Dimensiones de la pantalla
 from modules.configs import FPS, RELOJ # Configuraciones nucleo main
 # MENU #
-from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_PUNTOS, ESTADO_AUDIO # Estados en el juego
+from modules.ventana import ESTADO_MENU, ESTADO_JUGAR, ESTADO_SALIR, ESTADO_PUNTOS, ESTADO_AUDIO,ESTADO_CREDITOS,FUENTE_GENERAL# Estados en el juego
 from modules.menu import ejecutar_menu # Menu completo
 # ENTIDADES #
 from modules.entidades.entidades import dibujar_entidad # graficador de entidades
@@ -34,16 +34,22 @@ from modules.pantalla_ranking import ejecutar_ranking
 from modules.sonido import ejecutar_sonidos
 
 #vidas
-from modules.entidades.vidas import dibujar_vidas
-
-#
+from modules.entidades.vidas import dibujar_vidas, perder_vida
+#creditos
+from modules.credi import ejecutar_creditos
+#sonidos 
+from modules.entidades.ladrillos import cargar_sonido_ladrillo
+from modules.entidades.vidas import cargar_sonidos,sonido_game_over
 pygame.init()
 pygame.font.init()
-
+pygame.mixer.init()
 # Configs. Ventana principal: (visual y nombre)
 pygame.display.set_caption(NOMBRE)
-
 pygame.display.set_icon(ICONO)
+#llamados de sonidos
+cargar_sonido_ladrillo()
+cargar_sonidos()
+
 
 def ejecutar_juego(pantalla, reloj):
     """
@@ -52,6 +58,8 @@ def ejecutar_juego(pantalla, reloj):
     """
 
     # ---- Crear entidades mutables ---- #
+    VIDAS=3 
+    perdediendo_vida=False
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
     ladrillos = crear_ladrillos(ANCHO)
     drops = [] # Soltados de objetos lista 
@@ -62,10 +70,6 @@ def ejecutar_juego(pantalla, reloj):
     
     #Variable del puntaje
     puntaje_actual = 0
-    
-    
-    
-
     #fuente para el puntaje:
     fuente_hud = pygame.font.SysFont("Arial", 30, bold=True)
     
@@ -89,7 +93,18 @@ def ejecutar_juego(pantalla, reloj):
         # 1) movimiento de entidades
         movimiento_paleta(paleta_rect)
         vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
+        if pelota_rect.top > ALTO and not perdediendo_vida:
+            perdediendo_vida=True
+            VIDAS, game_over = perder_vida(VIDAS)
+            pelota_rect.center = (POS_X_PELOTA, POS_Y_PELOTA)
+            vel_y = -abs(vel_y)
 
+            if game_over:
+                if sonido_game_over:
+                    sonido_game_over.play()
+                return ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False)
+        if pelota_rect.top <= ALTO:
+            perdediendo_vida= False
         # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
         vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
         puntaje_actual += puntos_nuevos
@@ -119,7 +134,7 @@ def ejecutar_juego(pantalla, reloj):
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
         dibujar_ladrillos(pantalla, ladrillos)
-
+        dibujar_vidas(VIDAS)
         #dibujando puntaje
         texto_superficie = fuente_hud.render(f"PUNTOS: {puntaje_actual}", True, (255, 255, 255))
         
@@ -161,10 +176,16 @@ def main()->None:
             
         elif estado_actual == ESTADO_AUDIO:    
             estado_actual = ejecutar_sonidos(ventana_principal, RELOJ)
-                    
-            # Si el juego nos dice que salgamos, detenemos el bucle principal
-            if estado_actual == ESTADO_SALIR:
-                corriendo = False
+        elif estado_actual == ESTADO_CREDITOS:
+            print(">>> MAIN ENTRO A CREDITOS")
+
+    # 🔥 BLOQUEA TODO HASTA QUE CREDITOS TERMINE
+            while estado_actual == ESTADO_CREDITOS:
+                estado_actual = ejecutar_creditos(ventana_principal, RELOJ)
+
+                # Si el juego nos dice que salgamos, detenemos el bucle principal
+        elif estado_actual == ESTADO_SALIR:
+            corriendo = False
             # Si el juego devuelve ESTADO_MENU, el bucle continuará y pasará al if ESTADO_MENU
 
         # Nota: Aquí no hay un pygame.display.update() global porque

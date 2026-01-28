@@ -11,6 +11,7 @@ import random
 import os
 from modules.entidades.tiradas_objetos import crear_drop
 
+
 # ============================================================
 # CONFIGURACIÓN
 # ============================================================
@@ -50,6 +51,16 @@ COLORES_ESPECIALES = [
 # ============================================================
 # CARGAR IMAGEN
 # ============================================================
+sonido_ladrillo=None
+
+def cargar_sonido_ladrillo():
+    global sonido_ladrillo
+    if sonido_ladrillo is None:
+        sonido_ladrillo = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/destruccion_bloc.wav")
+        sonido_ladrillo.set_volume(0.6)
+
+
+
 
 def cargar_imagen(nombre, ancho=ANCHO_IMAGEN, alto=ALTO_IMAGEN):
     """Carga una imagen si existe, y la escala al tamaño del ladrillo."""
@@ -164,7 +175,8 @@ def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops):
 
             # ↓ Si el ladrillo muere...
             if ladrillo["vida"] <= 0:
-
+                if sonido_ladrillo:
+                    sonido_ladrillo.play()
                 # Si era especial → drop
                 if ladrillo["tipo"] == "especial":
                     drops.append(crear_drop(ladrillo["rect"].centerx,
