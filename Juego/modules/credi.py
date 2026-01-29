@@ -6,7 +6,8 @@ CREDITOS = [
     ("AlumYs", r"C:\juego\Tux-s-Revolution\Juego\assets\images\lauta.png.png")
 ]
 
-
+RUTA_MUSICA=r"C:/juego/Tux-s-Revolution/Juego/assets/sounds/creditos_music.mp3"
+print(os.path.exists(RUTA_MUSICA))  # Debe imprimir True
 def ejecutar_creditos(_, reloj):
     pantalla = pygame.display.get_surface()
     w, h = pantalla.get_size()
@@ -15,15 +16,31 @@ def ejecutar_creditos(_, reloj):
 
     creditos = []
     for nombre, ruta in CREDITOS:
-        img = pygame.transform.scale(pygame.image.load(ruta).convert_alpha(), (80, 80)) if os.path.exists(ruta) else pygame.Surface((80,80))
-        if not os.path.exists(ruta): img.fill((255,0,0))
+        if os.path.exists(ruta):
+            img = pygame.transform.scale(pygame.image.load(ruta).convert_alpha(), (80, 80))
+        else:
+            img = pygame.Surface((80,80))
+            img.fill((255,0,0))
         creditos.append((f_texto.render(nombre, True, (255,255,255)), img))
+
+    # 🎵 Música de créditos
+    if os.path.exists(RUTA_MUSICA):
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(RUTA_MUSICA)
+        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.play(-1)  # Loop infinito
+    else:
+        print("⚠️ No se encontró música de créditos")
 
     while True:
         reloj.tick(60)
         for e in pygame.event.get():
-            if e.type == pygame.QUIT: return "SALIR"
-            if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE: return "MENU"
+            if e.type == pygame.QUIT:
+                pygame.mixer.music.stop()  # Detener música al salir
+                return "SALIR"
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+                pygame.mixer.music.stop()  # Detener música al volver al menú
+                return "MENU"
 
         pantalla.fill((30,30,30))
         pantalla.blit(f_titulo.render("CRÉDITOS", True, (255,255,0)), (cx-150, 80))

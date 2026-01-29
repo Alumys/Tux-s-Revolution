@@ -19,12 +19,10 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
-#######################
+
 # Ladrillos:
-#from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
-##
+
 from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
-from modules.entidades.tiradas_objetos import crear_drop, actualizar_drop, dibujar_drop, drop_colisiona_paleta, aplicar_power_up
 
 # agregando la importacion para sl sistema de puntos
 from modules.fin_juego import ejecutar_pantalla_fin
@@ -32,14 +30,15 @@ from modules.fin_juego import ejecutar_pantalla_fin
 from modules.pantalla_ranking import ejecutar_ranking
 #sonido
 from modules.sonido import ejecutar_sonidos
-
+from modules.cronometro import actualizar_cronometro,dibujar_cronometro,se_acabo
 #vidas
 from modules.entidades.vidas import dibujar_vidas, perder_vida
 #creditos
 from modules.credi import ejecutar_creditos
 #sonidos 
-from modules.entidades.ladrillos import cargar_sonido_ladrillo
+from modules.entidades.ladrillos import cargar_sonidos_ladrillos
 from modules.entidades.vidas import cargar_sonidos,sonido_game_over
+from modules.mus_princi import iniciar_sonidos_juego
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -47,28 +46,27 @@ pygame.mixer.init()
 pygame.display.set_caption(NOMBRE)
 pygame.display.set_icon(ICONO)
 #llamados de sonidos
-cargar_sonido_ladrillo()
+sonido_ladri=cargar_sonidos_ladrillos()
 cargar_sonidos()
-
-
 def ejecutar_juego(pantalla, reloj):
     """
     Bucle principal del estado JUGAR.
     Maneja paleta, pelota, movimiento y colisiones.
     """
-
+    iniciar_sonidos_juego(True,volumen_inicio=1.0,volumen_musica=0.4)
     # ---- Crear entidades mutables ---- #
     VIDAS=3 
     perdediendo_vida=False
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
     ladrillos = crear_ladrillos(ANCHO)
-    drops = [] # Soltados de objetos lista 
+    tiempo_restante=90
+    fuente_cronometro=pygame.font.SysFont("arial" ,35, bold= True)
     # @~LAU-NOTA:~
     # no se puede retirar porque sus elementos van mutando siempre # NO TOCAR # 
     # es posible moverlo, pero modularizarlo no... es complejo de momento
     # --- LADRILLOS ---
     
-    #Variable del puntaje
+    #Variable del puntajegi
     puntaje_actual = 0
     #fuente para el puntaje:
     fuente_hud = pygame.font.SysFont("Arial", 30, bold=True)
@@ -106,7 +104,7 @@ def ejecutar_juego(pantalla, reloj):
         if pelota_rect.top <= ALTO:
             perdediendo_vida= False
         # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
-        vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
+        vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos,sonido_ladri)
         puntaje_actual += puntos_nuevos
         
         print(f"Ladrillos restantes: {len(ladrillos)}")
@@ -116,18 +114,6 @@ def ejecutar_juego(pantalla, reloj):
         
         
         
-        
-        # 3) actualizar y dibujar drops (IMPORTANTE: iterar sobre copia)
-        for drop in drops:
-            actualizar_drop(drop, ALTO)
-            dibujar_drop(pantalla, drop)
-
-            if drop_colisiona_paleta(drop, paleta_rect):
-                aplicar_power_up(drop, paleta_rect, pelota_rect)  # fut1uro
-                drops.remove(drop)
-                
-                
-        
 
 
         # 4) dibujado entidades y ladrillos
@@ -135,6 +121,7 @@ def ejecutar_juego(pantalla, reloj):
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
         dibujar_ladrillos(pantalla, ladrillos)
         dibujar_vidas(VIDAS)
+        dibujar_cronometro(pantalla,fuente_cronometro,tiempo_restante,posicion=(20, ALTO-50))
         #dibujando puntaje
         texto_superficie = fuente_hud.render(f"PUNTOS: {puntaje_actual}", True, (255, 255, 255))
         
@@ -143,6 +130,10 @@ def ejecutar_juego(pantalla, reloj):
         pos_y = 450 # Un poco separado del techo
         
         pantalla.blit(texto_superficie, (pos_x, pos_y))
+        dt= 1/FPS
+        tiempo_restante=actualizar_cronometro(tiempo_restante, dt)
+        if se_acabo(tiempo_restante):
+            return ejecutar_pantalla_fin(pantalla,RELOJ,puntaje_actual,False)
         pygame.display.flip()
 
     return ESTADO_SALIR

@@ -11,9 +11,12 @@ def cargar_sonidos():
     sonido_perder_vida = pygame.mixer.Sound(
         "C:/juego/Tux-s-Revolution/Juego/assets/sounds/perder_vida.wav"
     )
-    sonido_perder_vida.set_volume(0.7)
-    sonido_game_over=pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/perder.wva.wav")
-    sonido_game_over.set_volume(0.8)
+    sonido_perder_vida.set_volume(0.8)
+    
+    
+    global sonido_game_over
+    sonido_game_over=pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/final.mp3")
+    sonido_game_over.set_volume(1.0)
 
 
 def dibujar_vidas(VIDAS:int):
@@ -27,7 +30,7 @@ def perder_vida(VIDAS: int) -> tuple[int, bool]:
     if VIDAS <= 0:
         if sonido_game_over:
             sonido_game_over.play()
-            pygame.time.delay(800)
+            pygame.time.delay(1000)
         print("game over")
         
         return VIDAS, True
