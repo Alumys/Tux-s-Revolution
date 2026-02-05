@@ -15,7 +15,7 @@ except ImportError:
 ROJO_ERROR = (200, 50, 50)  # Para Game Over
 VERDE_EXITO = (50, 200, 50) # Para Victoria
 
-def ejecutar_pantalla_fin(pantalla, reloj, puntaje_final, gano_partida):
+def ejecutar_pantalla_fin(pantalla, reloj, puntaje_final, gano_partida,tiempo_agotado=False):
     """
     Muestra la pantalla de fin, pide nombre y guarda puntaje.
     """
@@ -26,6 +26,11 @@ def ejecutar_pantalla_fin(pantalla, reloj, puntaje_final, gano_partida):
     if gano_partida:
         texto_titulo = "¡VICTORIA!"
         color_titulo = VERDE_EXITO
+   
+    elif tiempo_agotado:
+        texto_titulo="SE ACABO EL TIEMPO"
+        color_titulo=AMARILLO
+
     else:
         texto_titulo = "GAME OVER"
         color_titulo = ROJO_ERROR

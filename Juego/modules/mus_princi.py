@@ -13,8 +13,8 @@ import pygame
 import os
 
 # Rutas fijas dentro del módulo
-RUTA_VOZ_INICIO = "C:/juego/Tux-s-Revolution/Juego/assets/sounds/comienza_el_juego.ogg"
-RUTA_MUSICA_JUEGO = "C:/juego/Tux-s-Revolution/Juego/assets/sounds/sonido_juego.mp3"
+RUTA_VOZ_INICIO = "C:/juego/Tux-s-Revolution/Juego/assets/sounds/comienzo.mp3"
+RUTA_MUSICA_JUEGO = "C:/juego/Tux-s-Revolution/Juego/assets/sounds/loop_juego.mp3"
 
 def iniciar_sonidos_juego(esperar_inicio=True, volumen_inicio=1.0, volumen_musica=1.0):
     """
@@ -46,6 +46,6 @@ def iniciar_sonidos_juego(esperar_inicio=True, volumen_inicio=1.0, volumen_music
 
 def sonido_victoria(volumen=1.0):
     """Reproduce un sonido cuando el jugador gana."""
-    sonido_win = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sound3s/victoria.mp")
-    sonido_win.set_volume(volumen)
-    sonido_win.play()
+    sonido_win = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/victoria.mp3")
+    sonido_win.set_volume(1.0)
+    sonido_win.play(0) #0=suena una sola vez

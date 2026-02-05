@@ -36,9 +36,9 @@ def cargar_sonidos_ladrillos():
     """Carga los sonidos de los ladrillos y los devuelve en un diccionario"""
     sonidos = {}
     sonidos['romper'] = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/destruccion_bloc.wav")
-    sonidos['golpe'] = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/metalico.wav")
-    sonidos['romper'].set_volume(0.1)
-    sonidos['golpe'].set_volume(0.2)
+    sonidos['golpe'] = pygame.mixer.Sound("C:/juego/Tux-s-Revolution/Juego/assets/sounds/metal.wav")
+    sonidos['romper'].set_volume(1.0)
+    sonidos['golpe'].set_volume(1.0)
     return sonidos
 
 # ============================================================

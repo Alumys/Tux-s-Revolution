@@ -38,7 +38,8 @@ from modules.credi import ejecutar_creditos
 #sonidos 
 from modules.entidades.ladrillos import cargar_sonidos_ladrillos
 from modules.entidades.vidas import cargar_sonidos,sonido_game_over
-from modules.mus_princi import iniciar_sonidos_juego
+from modules.mus_princi import iniciar_sonidos_juego,sonido_victoria
+from modules.entidades.poder_pelo import actualizar_pelotas
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -58,6 +59,14 @@ def ejecutar_juego(pantalla, reloj):
     VIDAS=3 
     perdediendo_vida=False
     pelota_rect, pelota_img, vel_x, vel_y = crear_pelota(POS_X_PELOTA, POS_Y_PELOTA, tamano_pelota) 
+    pelotas = [{
+    "rect": pelota_rect,
+    "img": pelota_img,
+    "vx": vel_x,
+    "vy": vel_y,
+    "extra": False
+}]
+
     ladrillos = crear_ladrillos(ANCHO)
     tiempo_restante=90
     fuente_cronometro=pygame.font.SysFont("arial" ,35, bold= True)
@@ -90,7 +99,8 @@ def ejecutar_juego(pantalla, reloj):
 
         # 1) movimiento de entidades
         movimiento_paleta(paleta_rect)
-        vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
+        actualizar_pelotas(pelotas,paleta_rect,ladrillos,sonido_ladri,ANCHO,ALTO,tamano_pelota)
+
         if pelota_rect.top > ALTO and not perdediendo_vida:
             perdediendo_vida=True
             VIDAS, game_over = perder_vida(VIDAS)
@@ -100,7 +110,7 @@ def ejecutar_juego(pantalla, reloj):
             if game_over:
                 if sonido_game_over:
                     sonido_game_over.play()
-                return ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False)
+                return ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False,True)
         if pelota_rect.top <= ALTO:
             perdediendo_vida= False
         # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
@@ -110,15 +120,19 @@ def ejecutar_juego(pantalla, reloj):
         print(f"Ladrillos restantes: {len(ladrillos)}")
         if len(ladrillos) == 10:
             print("VICTORIA DETECTADA")
-            return ejecutar_pantalla_fin(pantalla,reloj, puntaje_actual, True)
+            sonido_victoria(0.8)
+            while pygame.mixer.get_busy():
+                pygame.time.delay(100)
+            return ejecutar_pantalla_fin(pantalla,reloj, puntaje_actual, True,False)
         
         
         
 
 
         # 4) dibujado entidades y ladrillos
-        dibujar_entidad(pantalla, paleta_img, paleta_rect)
-        dibujar_entidad(pantalla, pelota_img, pelota_rect)
+        for pelota in pelotas:
+            dibujar_entidad(pantalla, pelota["img"], pelota["rect"])
+        dibujar_entidad(pantalla,paleta_img,paleta_rect)
         dibujar_ladrillos(pantalla, ladrillos)
         dibujar_vidas(VIDAS)
         dibujar_cronometro(pantalla,fuente_cronometro,tiempo_restante,posicion=(20, ALTO-50))
@@ -132,8 +146,9 @@ def ejecutar_juego(pantalla, reloj):
         pantalla.blit(texto_superficie, (pos_x, pos_y))
         dt= 1/FPS
         tiempo_restante=actualizar_cronometro(tiempo_restante, dt)
+        
         if se_acabo(tiempo_restante):
-            return ejecutar_pantalla_fin(pantalla,RELOJ,puntaje_actual,False)
+            return ejecutar_pantalla_fin(pantalla,RELOJ,puntaje_actual,False,True)
         pygame.display.flip()
 
     return ESTADO_SALIR
