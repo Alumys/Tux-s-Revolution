@@ -59,3 +59,16 @@ def movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ancho, alto):
     return vel_x, vel_y
 
 #LUEGO CREAR LA VERSION WINE#
+
+# --- AGREGAR ESTO AL FINAL DE pelota.py ---
+
+def reiniciar_pelota(pelota_rect):
+    """
+    Coloca la pelota en su posición inicial y devuelve 
+    velocidades estándar para el saque.
+    """
+    pelota_rect.x = POS_X_PELOTA
+    pelota_rect.y = POS_Y_PELOTA
+    
+    # Devolvemos una velocidad estándar (X=5, Y=-5 para que suba)
+    return 5, -5

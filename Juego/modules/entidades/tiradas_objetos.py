@@ -1,6 +1,7 @@
 import os
 import random
 import pygame
+from modules.entidades.poderes import efecto_velocidad_tux, efecto_vida_extra
 """
 modules/entidades/tiradas_objetos.py
 
@@ -49,16 +50,23 @@ def crear_drop(x, y, ancho=DEFAULT_ANCHO, alto=DEFAULT_ALTO, color=None, ruta_im
         imagen = pygame.image.load(ruta_imagen).convert_alpha()
         imagen = pygame.transform.scale(imagen, (ancho, alto))
 
-    # si no hay imagen y no se dio color, generamos uno aleatorio 'suave'
-    if imagen is None and color is None:
-        color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
+    # 1. Elegimos qué tipo de poder es (Vida o Velocidad)
+    tipo_poder = random.choice(["vida", "velocidad"])
+    
+    # 2. Le asignamos el color según el tipo
+    if tipo_poder == "vida":
+        color = (255, 0, 0)
+    else:
+        color = (0, 255, 255)
+        
 
     return {
         "rect": rect,
         "imagen": imagen,
         "color": color,
-        "velocidad": DEFAULT_VEL,
-        "activo": True
+        "velocidad": 3,
+        "activo": True,
+        "tipo": tipo_poder
     }
 
 
@@ -100,9 +108,23 @@ def drop_colisiona_paleta(drop, paleta_rect):
     return False
 
 
-def aplicar_power_up(drop, paleta_rect, pelota_rect):
+def aplicar_power_up(drop, paleta_rect, vidas_actuales, velocidad_actual):
     """
-    FUTURO: aquí se aplicarán los efectos reales de cada power-up.
-    Por ahora solo evita que el juego crashee.
+    Aplica el efecto según el tipo del drop.
+    Devuelve las vidas y la velocidad (posiblemente modificadas).
     """
-    print("Aplicando power-up (placeholder)...")
+    # 1. Identificamos qué poder es
+    # Si por alguna razón no tiene tipo, asumimos que es velocidad
+    tipo = drop.get("tipo", "velocidad") 
+    
+    # 2. Aplicamos el efecto correspondiente
+    if tipo == "velocidad":
+        # Llamamos a la funcion de poderes.py
+        velocidad_actual = efecto_velocidad_tux(velocidad_actual)
+        
+    elif tipo == "vida":
+        # Llamamos a la funcion de poderes.py
+        vidas_actuales = efecto_vida_extra(vidas_actuales)
+        
+    # 3. Importante: Devolvemos AMBOS valores al main para que actualice el juego
+    return vidas_actuales, velocidad_actual

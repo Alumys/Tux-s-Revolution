@@ -41,7 +41,7 @@ def crear_paleta(x, y, ancho, alto, color=(255, 255, 255)):
 
 # Funcion Movimiento de Paleta 
 
-def movimiento_paleta(paleta_rect, velocidad=velocidades_xx, limite_izq=LIMIT_IZQUIERDA, limite_der=LIMIT_DERECHA):
+def movimiento_paleta(paleta_rect, velocidad = 5, limite_izq=LIMIT_IZQUIERDA, limite_der=LIMIT_DERECHA):
     """ Mueve la paleta según las teclas presionadas. """
     teclas = pygame.key.get_pressed()
 

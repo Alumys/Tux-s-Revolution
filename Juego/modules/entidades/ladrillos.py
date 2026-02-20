@@ -155,20 +155,25 @@ def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops):
     """
     
     puntos_ganados = 0
+    
 
-    for ladrillo in ladrillos:
+    for ladrillo in ladrillos[:]:
         if pelota_rect.colliderect(ladrillo["rect"]):
 
             # ↓ Resta vida
             ladrillo["vida"] -= 1
+           
 
             # ↓ Si el ladrillo muere...
             if ladrillo["vida"] <= 0:
-
+                
+                
+               
                 # Si era especial → drop
                 if ladrillo["tipo"] == "especial":
                     drops.append(crear_drop(ladrillo["rect"].centerx,
                                             ladrillo["rect"].centery))
+                    
 
                 # Eliminar ladrillo
                 ladrillos.remove(ladrillo)
@@ -178,7 +183,6 @@ def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops):
             return -vel_y, puntos_ganados
 
     return vel_y, 0
-
 
 # ============================================================
 # DIBUJAR

@@ -19,6 +19,7 @@ from modules.entidades.paleta import paleta_rect, paleta_img # Parametros de dib
 from modules.entidades.pelota import crear_pelota # creador de pelotas
 from modules.entidades.pelota import tamano_pelota,POS_Y_PELOTA, POS_X_PELOTA # valores pelota
 from modules.entidades.pelota import movimiento_pelota # movimiento de pelota
+from modules.entidades.pelota import reiniciar_pelota
 #######################
 # Ladrillos:
 #from modules.entidades.ladrillos import crear_ladrillos, dibujar_ladrillos, colisionar_con_ladrillos
@@ -62,6 +63,8 @@ def ejecutar_juego(pantalla, reloj):
     
     #Variable del puntaje
     puntaje_actual = 0
+    vidas = 3
+    velocidad_paleta = 5
     
     
     
@@ -87,8 +90,31 @@ def ejecutar_juego(pantalla, reloj):
                     ladrillos.clear()
 
         # 1) movimiento de entidades
-        movimiento_paleta(paleta_rect)
+        movimiento_paleta(paleta_rect, velocidad_paleta)
         vel_x, vel_y = movimiento_pelota(pelota_rect, paleta_rect, vel_x, vel_y, ANCHO, ALTO)
+        
+        #NUEVA LOGICA DE CAIDA (inicio)
+        if pelota_rect.top > ALTO:  
+            vidas -= 1 # quitamos una vida
+            
+            #2 verificamos si perdio del todo
+            if vidas == 0:
+                print("GAME OVER")
+                #llamamos a la pantalla final indicando False (perdio)
+                return ejecutar_pantalla_fin(pantalla, reloj, puntaje_actual, False)
+            else:
+                print(f"te quedan {vidas} vidas. reiniciando...")
+                #usamos la nueva funcion para volver al centro
+                #importante: actualizamos vel_x y vel_y con lo que devuelve la funcion
+                vel_x, vel_y = reiniciar_pelota(pelota_rect)
+                
+                #puequeña pausa de 1 segundo para que el jugador se prepare
+                pygame.time.delay(1000)
+                
+                #limpiamos eventos para que no se acumulen teclas durante la pausa
+                pygame.event.clear()
+                
+        #LOGICA DE CAIDA FIN
 
         # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
         vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, drops)
@@ -108,7 +134,7 @@ def ejecutar_juego(pantalla, reloj):
             dibujar_drop(pantalla, drop)
 
             if drop_colisiona_paleta(drop, paleta_rect):
-                aplicar_power_up(drop, paleta_rect, pelota_rect)  # fut1uro
+                vidas, velocidad_paleta = aplicar_power_up(drop, paleta_rect, vidas, velocidad_paleta)
                 drops.remove(drop)
                 
                 
@@ -116,6 +142,7 @@ def ejecutar_juego(pantalla, reloj):
 
 
         # 4) dibujado entidades y ladrillos
+        
         dibujar_entidad(pantalla, paleta_img, paleta_rect)
         dibujar_entidad(pantalla, pelota_img, pelota_rect)
         dibujar_ladrillos(pantalla, ladrillos)
@@ -128,6 +155,11 @@ def ejecutar_juego(pantalla, reloj):
         pos_y = 450 # Un poco separado del techo
         
         pantalla.blit(texto_superficie, (pos_x, pos_y))
+        
+        texto_vidas = fuente_hud.render(f"VIDAS: {vidas}", True, (255, 255, 255))
+        
+        pantalla.blit(texto_vidas, (20, 450))
+        
         pygame.display.flip()
 
     return ESTADO_SALIR
