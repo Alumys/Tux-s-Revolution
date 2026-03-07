@@ -114,7 +114,7 @@ def ejecutar_juego(pantalla, reloj):
         if pelota_rect.top <= ALTO:
             perdediendo_vida= False
         # 2) colisión pelota <-> ladrillos (ahora recibe drops/objetos), y puntaje
-        vel_y, puntos_nuevos = colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos,sonido_ladri)
+        vel_y, puntos_nuevos,tipo_ladrillo= colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos,sonido_ladri)
         puntaje_actual += puntos_nuevos
         
         print(f"Ladrillos restantes: {len(ladrillos)}")

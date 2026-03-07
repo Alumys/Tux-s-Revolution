@@ -107,25 +107,28 @@ def crear_ladrillos(ancho_pantalla):
 # ============================================================
 # COLISIONES
 # ============================================================
-
 def colisionar_con_ladrillos(pelota_rect, vel_y, ladrillos, sonidos):
-    puntos_ganados = 0
-
     for ladrillo in ladrillos:
         if pelota_rect.colliderect(ladrillo["rect"]):
             ladrillo["vida"] -= 1
 
-            if ladrillo["vida"] > 0 and 'golpe' in sonidos:
-                sonidos['golpe'].play()
+            # no se rompe
+            if ladrillo["vida"] > 0:
+                if 'golpe' in sonidos:
+                    sonidos['golpe'].play()
+                return -vel_y, 0, None
 
-            if ladrillo["vida"] <= 0 and 'romper' in sonidos:
+            # se rompe
+            if 'romper' in sonidos:
                 sonidos['romper'].play()
-                ladrillos.remove(ladrillo)
-                puntos_ganados = 100
 
-            return -vel_y, puntos_ganados
+            tipo_ladrillo = ladrillo["tipo"]
+            ladrillos.remove(ladrillo)
 
-    return vel_y, 0
+            return -vel_y, 100, tipo_ladrillo
+
+    return vel_y, 0, None
+
 
 # ============================================================
 # DIBUJAR LADRILLOS
