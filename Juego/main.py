@@ -40,7 +40,7 @@ from modules.entidades.ladrillos import cargar_sonidos_ladrillos
 from modules.entidades.vidas import cargar_sonidos,sonido_game_over
 from modules.mus_princi import iniciar_sonidos_juego,sonido_victoria
 from modules.entidades.poder_pelo import actualizar_pelotas
-pygame.init()
+pygame.init() #prueba 
 pygame.font.init()
 pygame.mixer.init()
 # Configs. Ventana principal: (visual y nombre)
@@ -205,3 +205,4 @@ def main()->None:
 
 if __name__ == "__main__":
     main()
+#hola git
